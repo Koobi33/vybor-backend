@@ -84,8 +84,37 @@ export const questionService = {
         return new ServiceResponse(ResponseStatus.Failed, 'Something went wrong', null, StatusCodes.NOT_FOUND);
       }
       if (user) {
+        function handleMultiplier(user: User, question: Question, option: 'option1' | 'option2') {
+          let multiplier = user.multiplier;
+          if (option === 'option1') {
+            if (question[option].votes > question.option2.votes && multiplier > 0) {
+              multiplier += 1;
+            } else if (question[option].votes > question.option2.votes && multiplier < 0) {
+              multiplier = 1;
+            } else if (question[option].votes < question.option2.votes && multiplier > 0) {
+              multiplier = -1;
+            } else if (question[option].votes < question.option2.votes && multiplier < 0) {
+              multiplier -= 1;
+            }
+          }
+          if (option === 'option2') {
+            if (question[option].votes > question.option1.votes && multiplier > 0) {
+              multiplier += 1;
+            } else if (question[option].votes > question.option1.votes && multiplier < 0) {
+              multiplier = 1;
+            } else if (question[option].votes < question.option1.votes && multiplier > 0) {
+              multiplier = -1;
+            } else if (question[option].votes < question.option1.votes && multiplier < 0) {
+              multiplier -= 1;
+            }
+          }
+          return multiplier;
+        }
+        const newMultiplier = handleMultiplier(user, question, option);
         const newUser = {
           ...user,
+          score: user.score + 10 * newMultiplier,
+          multiplier: newMultiplier,
           answeredQuestions: user?.answeredQuestions ? [...user.answeredQuestions, question?.id] : [],
         };
         await userRepository.updateOneAsync(newUser as User);

@@ -5,7 +5,7 @@ export const users: User[] = [
     id: 124,
     name: 'Alice',
     locale: 'ru',
-    score: 0,
+    score: 10,
     energy: 5,
     maxEnergy: 5,
     createdQuestions: [],
@@ -19,7 +19,7 @@ export const users: User[] = [
     id: 123,
     name: 'Bob',
     locale: 'ru',
-    score: 0,
+    score: 20,
     energy: 5,
     maxEnergy: 5,
     createdQuestions: [],
@@ -33,7 +33,7 @@ export const users: User[] = [
 
 export const userRepository = {
   findAllAsync: async (): Promise<User[]> => {
-    return users;
+    return users.sort((a, b) => b.score - a.score);
   },
 
   findByIdAsync: async (id: number): Promise<User | null> => {
