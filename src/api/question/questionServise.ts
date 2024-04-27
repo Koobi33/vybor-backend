@@ -113,7 +113,7 @@ export const questionService = {
         const newMultiplier = handleMultiplier(user, question, option);
         const newUser = {
           ...user,
-          score: user.score + 10 * newMultiplier,
+          score: newMultiplier > 0 ? user.score + 10 * newMultiplier : user.score + 10 * newMultiplier * -1,
           multiplier: newMultiplier,
           answeredQuestions: user?.answeredQuestions ? [...user.answeredQuestions, question?.id] : [],
         };
