@@ -2,7 +2,7 @@ import cors from 'cors';
 import express, { Express } from 'express';
 import helmet from 'helmet';
 import { pino } from 'pino';
-import bodyParser from 'body-parser'
+import bodyParser from 'body-parser';
 
 import { healthCheckRouter } from '@/api/healthCheck/healthCheckRouter';
 import { userRouter } from '@/api/user/userRouter';
@@ -17,7 +17,7 @@ const logger = pino({ name: 'server start' });
 const app: Express = express();
 
 // Set the application to trust the reverse proxy
-app.set('trust proxy', true);
+// app.set('trust proxy', true);
 
 // Middlewares
 app.use(cors({ origin: env.CORS_ORIGIN, credentials: true }));
