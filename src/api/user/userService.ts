@@ -13,7 +13,8 @@ export const userService = {
       if (!users) {
         return new ServiceResponse(ResponseStatus.Failed, 'No Users found', null, StatusCodes.NOT_FOUND);
       }
-      return new ServiceResponse<User[]>(ResponseStatus.Success, 'Users found', users, StatusCodes.OK);
+      const res = users.map((user) => ({ id: user.id, name: user.name, score: user.score }));
+      return new ServiceResponse<User[]>(ResponseStatus.Success, 'Users found', res, StatusCodes.OK);
     } catch (ex) {
       const errorMessage = `Error finding all users: $${(ex as Error).message}`;
       logger.error(errorMessage);

@@ -3,7 +3,7 @@ import { OpenAPIRegistry } from '@asteasolutions/zod-to-openapi';
 import { z } from 'zod';
 
 import {
-  GetQuestionSchema,
+  // GetQuestionSchema,
   GetQuestionVoteSchema,
   GetQuestionsListSchema,
   QuestionCreateSchema,
@@ -25,29 +25,29 @@ export const questionRouter: Router = (() => {
     method: 'get',
     path: '/questions',
     tags: ['Questions'],
-    request: { headers: GetQuestionsListSchema.shape.params },
+    request: { headers: GetQuestionsListSchema.shape.params, query: GetQuestionsListSchema.shape.query },
     responses: createApiResponse(z.array(QuestionSchema), 'Success'),
   });
 
   router.get('/', async (_req: Request, res: Response) => {
-    const serviceResponse = await questionService.findAll(Number(_req.headers.userid));
+    const serviceResponse = await questionService.findAll(Number(_req.headers.userid), _req.query.id as string);
     handleServiceResponse(serviceResponse, res);
   });
 
   // GET QUESTION BY ID
-  questionRegistry.registerPath({
-    method: 'get',
-    path: '/questions/{id}',
-    tags: ['Questions'],
-    request: { params: GetQuestionSchema.shape.params },
-    responses: createApiResponse(QuestionSchema, 'Success'),
-  });
+  // questionRegistry.registerPath({
+  //   method: 'get',
+  //   path: '/questions/{id}',
+  //   tags: ['Questions'],
+  //   request: { params: GetQuestionSchema.shape.params },
+  //   responses: createApiResponse(QuestionSchema, 'Success'),
+  // });
 
-  router.get('/:id', validateRequest(QuestionSchema), async (req: Request, res: Response) => {
-    const id = req.params.id;
-    const serviceResponse = await questionService.findById(id);
-    handleServiceResponse(serviceResponse, res);
-  });
+  // router.get('/:id', validateRequest(QuestionSchema), async (req: Request, res: Response) => {
+  //   const id = req.params.id;
+  //   const serviceResponse = await questionService.findById(id);
+  //   handleServiceResponse(serviceResponse, res);
+  // });
 
   // CREATE QUESTION
   questionRegistry.registerPath({

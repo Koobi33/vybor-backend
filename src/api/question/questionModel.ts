@@ -44,6 +44,7 @@ export const GetQuestionSchema = z.object({
 
 export const GetQuestionsListSchema = z.object({
   params: z.object({ userId: commonValidations.id }),
+  query: z.object({ id: z.string().nullable() }),
 });
 
 export const GetQuestionVoteSchema = z.object({

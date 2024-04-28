@@ -11,14 +11,25 @@ import { User } from '../user/userModel';
 
 export const questionService = {
   // Retrieves all questions from the database
-  findAll: async (userId: number): Promise<ServiceResponse<Question[] | null>> => {
+  findAll: async (userId: number, questionId?: string): Promise<ServiceResponse<Question[] | null>> => {
     try {
-      const questions = await questionRepository.findAllAsync();
+      let questions = await questionRepository.findAllAsync();
+      if (questionId) {
+        const questionIndex = questions.findIndex((question) => question.id === questionId);
+        if (questionIndex) {
+          questions.sort((a, b) => (a.id == questionId ? -1 : b.id == questionId ? 1 : 0));
+        }
+      }
       const user = await userRepository.findByIdAsync(userId);
       if (!user || !questions) {
         return new ServiceResponse(ResponseStatus.Failed, 'Something went wrong', null, StatusCodes.NOT_FOUND);
       }
-      const result = questions.filter((question) => !user.answeredQuestions.some((id) => id === question.id));
+      const result = questions.filter(
+        (question) =>
+          question.locale === user.locale &&
+          question.tags.findIndex((el) => el === 'default') >= 0 &&
+          !user.answeredQuestions.some((id) => id === question.id)
+      );
       return new ServiceResponse<Question[]>(ResponseStatus.Success, 'questions found', result, StatusCodes.OK);
     } catch (ex) {
       const errorMessage = `Error finding all questions: $${(ex as Error).message}`;
