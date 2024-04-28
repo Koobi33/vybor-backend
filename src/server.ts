@@ -21,7 +21,6 @@ app.set('trust proxy', true);
 
 // Middlewares
 app.use(cors({ origin: env.CORS_ORIGIN, credentials: true }));
-app.use(helmet());
 app.use(rateLimiter);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -36,6 +35,8 @@ app.use('/questions', questionRouter);
 
 // Swagger UI
 app.use(openAPIRouter);
+
+app.use(helmet());
 
 // Error handlers
 app.use(errorHandler());
