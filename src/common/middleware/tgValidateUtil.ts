@@ -1,6 +1,6 @@
 import { RequestHandler } from 'express';
 
-import * as crypto from 'crypto';
+import * as crypto from 'node:crypto';
 import { env } from '@/common/utils/envConfig';
 
 const verifyInitData: RequestHandler = (_req, res, next) => {
