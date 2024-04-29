@@ -11,6 +11,7 @@ import { openAPIRouter } from '@/api-docs/openAPIRouter';
 import errorHandler from '@/common/middleware/errorHandler';
 import rateLimiter from '@/common/middleware/rateLimiter';
 import requestLogger from '@/common/middleware/requestLogger';
+import verifyTelegramData from '@/common/middleware/tgValidateUtil';
 import { env } from '@/common/utils/envConfig';
 
 const logger = pino({ name: 'server start' });
@@ -30,8 +31,8 @@ app.use(requestLogger);
 
 // Routes
 app.use('/health-check', healthCheckRouter);
-app.use('/users', userRouter);
-app.use('/questions', questionRouter);
+app.use('/users', verifyTelegramData, userRouter);
+app.use('/questions', verifyTelegramData, questionRouter);
 
 // Swagger UI
 app.use(openAPIRouter);
