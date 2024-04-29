@@ -23,6 +23,7 @@ const verifyInitData: RequestHandler = (_req, res, next) => {
   const secret = crypto.createHmac('sha256', 'WebAppData').update(env.BOT_SECRET ?? '');
   const calculatedHash = crypto.createHmac('sha256', secret.digest()).update(dataCheckString).digest('hex');
 
+  console.log(telegramInitData, calculatedHash === hash);
   if (calculatedHash === hash) {
     return next();
   }
