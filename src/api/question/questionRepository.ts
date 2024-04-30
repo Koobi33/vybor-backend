@@ -1,8 +1,10 @@
-import { v4 as uuidv4 } from 'uuid';
+//import { v4 as uuidv4 } from 'uuid';
 
 import { Question } from '@/api/question/questionModel';
 
-export const questions: Question[] = [
+const pool = require('@/common/db');
+
+/*export const questions: Question[] = [
   {
     id: uuidv4(),
     tags: ['default'],
@@ -57,26 +59,97 @@ export const questions: Question[] = [
     createdAt: new Date(),
     updatedAt: new Date(),
   },
-];
+];*/
 
 export const questionRepository = {
   findAllAsync: async (): Promise<Question[]> => {
-    return questions;
+    //return questions;
+    try {
+      const query = 'select * from questions';
+
+      const result = await pool.query(query);
+      
+      return result.rows;
+    } catch (error) {
+      console.error('Error fetching questions:', error);
+      throw error;
+    }
   },
 
   findByIdAsync: async (id: string): Promise<Question | null> => {
-    return questions.find((question) => question.id === id) || null;
+    //return questions.find((question) => question.id === id) || null;
+    try {
+      const query = 'select * from questions where id = $1';
+      
+      const result = await pool.query(query, [id]);
+      
+      return result.rows.length ? result.rows[0] : null;
+    } catch (error) {
+      console.error(`Error fetching question with ID ${id}:`, error);
+      throw error;
+    }
   },
   addOneAsync: async (question: Question): Promise<Question | null> => {
-    questions.push(question);
-    return questions.find((el) => el.id === question.id) || null;
+    /*questions.push(question);
+    return questions.find((el) => el.id === question.id) || null;*/
+    try {
+      const query = `
+          insert into 
+          questions(player_author_id, label_locale, a1_locale, a1_selection_count, a1_image_url, a2_locale, a2_selection_count, a2_image_url)
+          values($1, $2, $3, $4, $5, $6, $7, $8) 
+          returning *`;
+
+      const result = await pool.query(query, [question.author, question.locale, question.option1.title, question.option1.votes, question.option1.img, question.option2.title, question.option2.votes, question.option2.img]);
+      
+      return result.rows.length ? result.rows[0] : null;
+    } catch (error) {
+      // Handling errors
+      console.error('Error adding question:', error);
+      throw error;
+    }
   },
   updateOneAsync: async (question: Question): Promise<Question | null> => {
-    questions.forEach((element, index) => {
+    /*questions.forEach((element, index) => {
       if (element.id === question.id) {
         questions[index] = question;
       }
     });
-    return questions.find((el) => el.id === question.id) || null;
+    return questions.find((el) => el.id === question.id) || null;*/
+    try {
+      // Query to update an existing question in the database
+      const query = `
+      update questions 
+      set 
+        label_locale = $1, 
+        a1_locale = $2, 
+        a1_selection_count = $3, 
+        a1_image_url = $4, 
+        a2_locale = $5, 
+        a2_selection_count = $6, 
+        a2_image_url = $7
+      where 
+        id = $8 
+      returning *`;
+
+      // Using a Promise to execute the query with the provided question data
+      const result = await pool.query(query, [
+        question.locale,
+        question.option1.title,
+        question.option1.votes,
+        question.option1.img,
+        question.option1.title,
+        question.option1.votes,
+        question.option1.img,
+        question.id
+      ]);
+
+      // If the question was successfully updated, return it
+      // Otherwise, return null
+      return result.rows.length ? result.rows[0] : null;
+    } catch (error) {
+      // Handling errors
+      console.error('Error updating question:', error);
+      throw error;
+    }
   },
 };
