@@ -6,6 +6,7 @@ import { commonValidations } from '@/common/utils/commonValidation';
 extendZodWithOpenApi(z);
 
 export type Question = z.infer<typeof QuestionSchema>;
+export const QuestionSchemaTest = z.string();
 export const QuestionSchema = z.object({
   id: z.number(),
   author: z.number(),
