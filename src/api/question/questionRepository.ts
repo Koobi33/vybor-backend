@@ -1,15 +1,14 @@
 //import { v4 as uuidv4 } from 'uuid';
 
-import { Question } from '@/api/question/questionModel';
+import {Question} from '@/api/question/questionModel';
 
 const pool = require('@/common/db');
 
 export const questions: Question[] = [
   {
     id: 1,
-    tags: ['default'],
     locale: 'ru',
-    author: 'admin',
+    author: 0,
     option1: {
       title: 'Переродиться царем в древние времена',
       votes: 75,
@@ -20,14 +19,11 @@ export const questions: Question[] = [
       votes: 25,
       img: 'https://lh7-us.googleusercontent.com/sheets/APBGjhZIyRytg7cBYLCwR4W_DXhQzWpcNhSqvEIIekNiuukkxSPIVXy68fgYzS-HWO8QFnIzgn210mzu3MApl66FNhNWvKVdZAJJPU6fdZ8CT76c94F5_JI0LIKZtPWVTrzKBIoaGEkXpqTq0b41ZromFIVzr343uKSLhz228xgTYjKa1TgUvZognMK6BX5KKmAuu0twm6kyKHJ5UjdUhaxqeojP9hKA4aD9P6SdaxuhyKIcFYre6_r4vg8PNm1XFIcv9_xhw13DeZnbOaDUPYUbL0t_BNKdd-rdRKJMiMg0BGkyQbC27IUaorLfw-OsBfyy3bHJSCcfOyxgPfOoUQd6l1uis1s233605qC3a2UTodmvon7T2c3A8-_rTfxAO-Wzr6_R26R16sORei7iylt2OCJRKBXDblnElp6sc0rI0CKC3zfxF_DrR9uf37aznDjqaWTrkODQetDzV4QMuNNXXYpDsaCmoxMO8z78WyKTDCj5eW5fhPf1dJXWcKEuY5dSzTD3Q1cQa0U1UbTuI_Xb5-F7oBzqsLqCx24CopmfA8kHtj-EJ2bu0kHZTuSaxoo7IlTFMEcLNCc9deZAnm2w5N4KynOkdX5auAVZU2jKsUqMOPSyUV4kkX6S9lBWBo0QiWO506irTonJOxI9Wm_jqhE1-lumqbtapBTyjj8K7iNkUFN_leD1kcnHWrgHZ0_QjtX2sE22-djuOkC21ZxwW3pKeDxskZucqebgpe0qQqHaVBr7j-0l8T8_PsPH7twvYpDBfG9_jRfNmfqBaMMdB-M6QPYsP53gfsD0-jshDrBTikoGKm-Y_Y7fxoesx4WHXR5_wRzUpK7eAss5wWzloU9f_RztZbZZ8yun5FfeAmmnul_uyI1FI4YfvmkMBXdICj9YjDqITUYjV79swn4F74mAh_9WWxGrr_2mrRC0gdFaVDJPmLVghx3-zFi849JBOAHcRMdkbnrwguDvwHV4lCixnRvSX8aBac_nsOy8gFgRRI6dK_jJoyN2qL5wOuGUrlwGmDyi6qh-Ei7RGWmObjt1fBRi6UpVuDrstffj0T85DYdm1xdfHD0=w167-h72',
     },
-    createdAt: new Date(),
-    updatedAt: new Date(),
   },
   {
     id: 2,
     locale: 'ru',
-    author: 'admin',
-    tags: ['default'],
+    author: 0,
     option1: {
       title: 'Курабье',
       votes: 60,
@@ -38,14 +34,11 @@ export const questions: Question[] = [
       votes: 40,
       img: 'https://lh7-us.googleusercontent.com/sheets/APBGjhZIyRytg7cBYLCwR4W_DXhQzWpcNhSqvEIIekNiuukkxSPIVXy68fgYzS-HWO8QFnIzgn210mzu3MApl66FNhNWvKVdZAJJPU6fdZ8CT76c94F5_JI0LIKZtPWVTrzKBIoaGEkXpqTq0b41ZromFIVzr343uKSLhz228xgTYjKa1TgUvZognMK6BX5KKmAuu0twm6kyKHJ5UjdUhaxqeojP9hKA4aD9P6SdaxuhyKIcFYre6_r4vg8PNm1XFIcv9_xhw13DeZnbOaDUPYUbL0t_BNKdd-rdRKJMiMg0BGkyQbC27IUaorLfw-OsBfyy3bHJSCcfOyxgPfOoUQd6l1uis1s233605qC3a2UTodmvon7T2c3A8-_rTfxAO-Wzr6_R26R16sORei7iylt2OCJRKBXDblnElp6sc0rI0CKC3zfxF_DrR9uf37aznDjqaWTrkODQetDzV4QMuNNXXYpDsaCmoxMO8z78WyKTDCj5eW5fhPf1dJXWcKEuY5dSzTD3Q1cQa0U1UbTuI_Xb5-F7oBzqsLqCx24CopmfA8kHtj-EJ2bu0kHZTuSaxoo7IlTFMEcLNCc9deZAnm2w5N4KynOkdX5auAVZU2jKsUqMOPSyUV4kkX6S9lBWBo0QiWO506irTonJOxI9Wm_jqhE1-lumqbtapBTyjj8K7iNkUFN_leD1kcnHWrgHZ0_QjtX2sE22-djuOkC21ZxwW3pKeDxskZucqebgpe0qQqHaVBr7j-0l8T8_PsPH7twvYpDBfG9_jRfNmfqBaMMdB-M6QPYsP53gfsD0-jshDrBTikoGKm-Y_Y7fxoesx4WHXR5_wRzUpK7eAss5wWzloU9f_RztZbZZ8yun5FfeAmmnul_uyI1FI4YfvmkMBXdICj9YjDqITUYjV79swn4F74mAh_9WWxGrr_2mrRC0gdFaVDJPmLVghx3-zFi849JBOAHcRMdkbnrwguDvwHV4lCixnRvSX8aBac_nsOy8gFgRRI6dK_jJoyN2qL5wOuGUrlwGmDyi6qh-Ei7RGWmObjt1fBRi6UpVuDrstffj0T85DYdm1xdfHD0=w167-h72',
     },
-    createdAt: new Date(),
-    updatedAt: new Date(),
   },
   {
     id: 3,
-    tags: ['default'],
     locale: 'ru',
-    author: 'admin',
+    author: 0,
     option1: {
       title: 'Ананас',
       votes: 15,
@@ -56,8 +49,8 @@ export const questions: Question[] = [
       votes: 85,
       img: 'https://lh7-us.googleusercontent.com/sheets/APBGjhZIyRytg7cBYLCwR4W_DXhQzWpcNhSqvEIIekNiuukkxSPIVXy68fgYzS-HWO8QFnIzgn210mzu3MApl66FNhNWvKVdZAJJPU6fdZ8CT76c94F5_JI0LIKZtPWVTrzKBIoaGEkXpqTq0b41ZromFIVzr343uKSLhz228xgTYjKa1TgUvZognMK6BX5KKmAuu0twm6kyKHJ5UjdUhaxqeojP9hKA4aD9P6SdaxuhyKIcFYre6_r4vg8PNm1XFIcv9_xhw13DeZnbOaDUPYUbL0t_BNKdd-rdRKJMiMg0BGkyQbC27IUaorLfw-OsBfyy3bHJSCcfOyxgPfOoUQd6l1uis1s233605qC3a2UTodmvon7T2c3A8-_rTfxAO-Wzr6_R26R16sORei7iylt2OCJRKBXDblnElp6sc0rI0CKC3zfxF_DrR9uf37aznDjqaWTrkODQetDzV4QMuNNXXYpDsaCmoxMO8z78WyKTDCj5eW5fhPf1dJXWcKEuY5dSzTD3Q1cQa0U1UbTuI_Xb5-F7oBzqsLqCx24CopmfA8kHtj-EJ2bu0kHZTuSaxoo7IlTFMEcLNCc9deZAnm2w5N4KynOkdX5auAVZU2jKsUqMOPSyUV4kkX6S9lBWBo0QiWO506irTonJOxI9Wm_jqhE1-lumqbtapBTyjj8K7iNkUFN_leD1kcnHWrgHZ0_QjtX2sE22-djuOkC21ZxwW3pKeDxskZucqebgpe0qQqHaVBr7j-0l8T8_PsPH7twvYpDBfG9_jRfNmfqBaMMdB-M6QPYsP53gfsD0-jshDrBTikoGKm-Y_Y7fxoesx4WHXR5_wRzUpK7eAss5wWzloU9f_RztZbZZ8yun5FfeAmmnul_uyI1FI4YfvmkMBXdICj9YjDqITUYjV79swn4F74mAh_9WWxGrr_2mrRC0gdFaVDJPmLVghx3-zFi849JBOAHcRMdkbnrwguDvwHV4lCixnRvSX8aBac_nsOy8gFgRRI6dK_jJoyN2qL5wOuGUrlwGmDyi6qh-Ei7RGWmObjt1fBRi6UpVuDrstffj0T85DYdm1xdfHD0=w167-h72',
     },
-    createdAt: new Date(),
-    updatedAt: new Date(),
+    //createdAt: new Date(),
+    //updatedAt: new Date(),
   },
 ];
 
@@ -67,9 +60,23 @@ export const questionRepository = {
     try {
       const query = 'select * from questions';
 
-      const result = await pool.query(query);
-      
-      return result.rows;
+      const queryResult = await pool.query(query);
+
+      return queryResult.rows.map(row => ({
+        id: row.id,
+        author: row.author,
+        locale: row.locale,
+        option1: {
+          title: row.a1_locale,
+          votes: row.a1_selection_count,
+          img: row.a1_image_url,
+        },
+        option2: {
+          title: row.a2_locale,
+          votes: row.a2_selection_count,
+          img: row.a2_image_url,
+        }
+      }));
     } catch (error) {
       console.error('Error fetching questions:', error);
       throw error;

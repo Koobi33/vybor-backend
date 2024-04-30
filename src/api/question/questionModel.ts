@@ -14,12 +14,12 @@ export const QuestionSchema = z.object({
   option1: z.object({
     title: z.string(),
     votes: z.number(),
-    img: z.string(),
+    img: z.string().nullable(),
   }),
   option2: z.object({
     title: z.string(),
     votes: z.number(),
-    img: z.string(),
+    img: z.string().nullable(),
   }),
   //createdAt: z.date(),
   //updatedAt: z.date(),
