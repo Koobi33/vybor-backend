@@ -63,7 +63,7 @@ export const questions: Question[] = [
 
 export const questionRepository = {
   findAllAsync: async (): Promise<Question[]> => {
-    return questions;
+    //return questions;
     try {
       const query = 'select * from questions';
 
