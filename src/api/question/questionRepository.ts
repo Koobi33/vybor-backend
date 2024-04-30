@@ -77,9 +77,9 @@ export const questionRepository = {
             img: row.a1_image_url,
           },
           option2: {
-            title: row.a1_locale,
-            votes: row.a1_selection_count,
-            img: row.a1_image_url,
+            title: row.a2_locale,
+            votes: row.a2_selection_count,
+            img: row.a2_image_url,
           }
         };
       });
