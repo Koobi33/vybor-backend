@@ -7,10 +7,10 @@ extendZodWithOpenApi(z);
 
 export type Question = z.infer<typeof QuestionSchema>;
 export const QuestionSchema = z.object({
-  id: z.string(),
+  id: z.number(),
   author: z.string(),
   locale: z.string(),
-  tags: z.array(z.string()),
+  //tags: z.array(z.string()),
   option1: z.object({
     title: z.string(),
     votes: z.number(),
@@ -21,8 +21,8 @@ export const QuestionSchema = z.object({
     votes: z.number(),
     img: z.string().nullable(),
   }),
-  createdAt: z.date(),
-  updatedAt: z.date(),
+  //createdAt: z.date(),
+  //updatedAt: z.date(),
 });
 
 export type QuestionCreate = z.infer<typeof QuestionCreateSchema>;

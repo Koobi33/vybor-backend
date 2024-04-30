@@ -4,9 +4,9 @@ import { Question } from '@/api/question/questionModel';
 
 const pool = require('@/common/db');
 
-/*export const questions: Question[] = [
+export const questions: Question[] = [
   {
-    id: uuidv4(),
+    id: 1,
     tags: ['default'],
     locale: 'ru',
     author: 'admin',
@@ -24,7 +24,7 @@ const pool = require('@/common/db');
     updatedAt: new Date(),
   },
   {
-    id: uuidv4(),
+    id: 2,
     locale: 'ru',
     author: 'admin',
     tags: ['default'],
@@ -42,7 +42,7 @@ const pool = require('@/common/db');
     updatedAt: new Date(),
   },
   {
-    id: uuidv4(),
+    id: 3,
     tags: ['default'],
     locale: 'ru',
     author: 'admin',
@@ -59,11 +59,11 @@ const pool = require('@/common/db');
     createdAt: new Date(),
     updatedAt: new Date(),
   },
-];*/
+];
 
 export const questionRepository = {
   findAllAsync: async (): Promise<Question[]> => {
-    //return questions;
+    return questions;
     try {
       const query = 'select * from questions';
 
