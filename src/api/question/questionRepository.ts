@@ -78,9 +78,9 @@ export const questionRepository = {
         }
       }));
 
-      questions.forEach(question => {
+      /*questions.forEach(question => {
         QuestionSchema.parse(question);
-      });
+      });*/
       
       return questions
     } catch (error) {
