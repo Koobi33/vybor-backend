@@ -62,14 +62,7 @@ export const questionRepository = {
 
       const queryResult = await pool.query(query);
 
-      const questions = queryResult.rows.map(row => {
-        try {
-          return QuestionSchema.parse(row);
-        } catch (error) {
-          console.error('Error parsing question:', error);
-          return null;
-        }
-      }).filter(Boolean);
+      const questions = queryResult.rows.map(row => QuestionSchema.parse(row));
 
       /*questions.forEach(question => {
         QuestionSchema.parse(question);
