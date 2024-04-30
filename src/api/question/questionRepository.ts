@@ -62,7 +62,7 @@ export const questionRepository = {
 
       const queryResult = await pool.query(query);
 
-      const questions : Question[] = queryResult.rows.map(row => ({
+      const questions = queryResult.rows.map(row => ({
         id: row.id,
         author: row.player_author_id,
         locale: row.label_locale,
@@ -78,11 +78,11 @@ export const questionRepository = {
         }
       }));
 
-      /*questions.forEach(question => {
+      questions.forEach(question => {
         QuestionSchema.parse(question);
-      });*/
+      });
       
-      return questions
+      return questions;
     } catch (error) {
       console.error('Error fetching questions:', error);
       throw error;
