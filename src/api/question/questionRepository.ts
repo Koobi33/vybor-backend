@@ -62,7 +62,7 @@ export const questionRepository = {
 
       const queryResult = await pool.query(query);
 
-      const questions = queryResult.rows.map(row => {
+      const questions = queryResult.rows.map<Question>(row => {
         //try {
           //QuestionSchema.parse({
         return {
