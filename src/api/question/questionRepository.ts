@@ -1,6 +1,6 @@
 //import { v4 as uuidv4 } from 'uuid';
 
-import {Question, QuestionSchema, QuestionSchemaTest} from '@/api/question/questionModel';
+import {Question} from '@/api/question/questionModel';
 
 const pool = require('@/common/db');
 
@@ -62,35 +62,27 @@ export const questionRepository = {
 
       const queryResult = await pool.query(query);
 
-      const questions = queryResult.rows.map(row => {
-        try {
-          /*return QuestionSchema.parse({
-            id: row.id,
-            locale: row.label_locale,
-            author: row.player_author_id,
-            option1: {
-              title: row.a1_locale,
-              votes: row.a1_selection_count,
-              img: row.a1_image_url,
-            },
-            option2: {
-              title: row.a1_locale,
-              votes: row.a1_selection_count,
-              img: row.a1_image_url,
-            }
-          });*/
-          return QuestionSchemaTest.parse(row.a1_locale);
-        }
-        catch (error) {
-          console.error('Error fetching questions:', error);
-        }
-      });
-
       /*questions.forEach(question => {
         QuestionSchema.parse(question);
       });*/
       
-      return questions;
+      return queryResult.rows.map(row => {
+        return {
+          id: row.id,
+          locale: row.label_locale,
+          author: row.player_author_id,
+          option1: {
+            title: row.a1_locale,
+            votes: row.a1_selection_count,
+            img: row.a1_image_url,
+          },
+          option2: {
+            title: row.a1_locale,
+            votes: row.a1_selection_count,
+            img: row.a1_image_url,
+          }
+        };
+      });
     } catch (error) {
       console.error('Error fetching questions:', error);
       throw error;

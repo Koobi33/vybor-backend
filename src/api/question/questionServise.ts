@@ -32,7 +32,7 @@ export const questionService = {
           question.locale === user.locale &&
           //question.tags.findIndex((el) => el === 'default') >= 0 &&
           !user.answeredQuestions.some((id) => id === question.id)
-      );*/
+      ); todo*/
       return new ServiceResponse<Question[]>(ResponseStatus.Success, 'questions found ' + questionsCount, questions, StatusCodes.OK);
     } catch (ex) {
       const errorMessage = `Error finding all questions: $${(ex as Error).message}`;
