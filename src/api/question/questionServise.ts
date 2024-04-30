@@ -24,13 +24,16 @@ export const questionService = {
       if (!user || !questions) {
         return new ServiceResponse(ResponseStatus.Failed, 'Something went wrong', null, StatusCodes.NOT_FOUND);
       }
-      const result = questions.filter(
+      
+      const questionsCount = questions.length;
+      
+      /*const result = questions.filter(
         (question) =>
           question.locale === user.locale &&
           //question.tags.findIndex((el) => el === 'default') >= 0 &&
           !user.answeredQuestions.some((id) => id === question.id)
-      );
-      return new ServiceResponse<Question[]>(ResponseStatus.Success, 'questions found', result, StatusCodes.OK);
+      );*/
+      return new ServiceResponse<Question[]>(ResponseStatus.Success, 'questions found ' + questionsCount, questions, StatusCodes.OK);
     } catch (ex) {
       const errorMessage = `Error finding all questions: $${(ex as Error).message}`;
       logger.error(errorMessage);
