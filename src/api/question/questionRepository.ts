@@ -1,6 +1,6 @@
 //import { v4 as uuidv4 } from 'uuid';
 
-import {Question} from '@/api/question/questionModel';
+import {Question, QuestionSchema} from '@/api/question/questionModel';
 
 const pool = require('@/common/db');
 
@@ -62,7 +62,7 @@ export const questionRepository = {
 
       const queryResult = await pool.query(query);
 
-      return queryResult.rows.map(row => ({
+      const questions : Question[] = queryResult.rows.map(row => ({
         id: row.id,
         author: row.author,
         locale: row.locale,
@@ -77,6 +77,12 @@ export const questionRepository = {
           img: row.a2_image_url,
         }
       }));
+
+      questions.forEach(question => {
+        QuestionSchema.parse(question);
+      });
+      
+      return questions
     } catch (error) {
       console.error('Error fetching questions:', error);
       throw error;
