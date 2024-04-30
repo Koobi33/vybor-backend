@@ -8,18 +8,18 @@ extendZodWithOpenApi(z);
 export type Question = z.infer<typeof QuestionSchema>;
 export const QuestionSchema = z.object({
   id: z.number(),
-  author: z.string(),
+  author: z.number(),
   locale: z.string(),
   //tags: z.array(z.string()),
   option1: z.object({
     title: z.string(),
     votes: z.number(),
-    img: z.string().nullable(),
+    img: z.string(),
   }),
   option2: z.object({
     title: z.string(),
     votes: z.number(),
-    img: z.string().nullable(),
+    img: z.string(),
   }),
   //createdAt: z.date(),
   //updatedAt: z.date(),
