@@ -31,8 +31,8 @@ app.use(requestLogger);
 
 // Routes
 app.use('/health-check', healthCheckRouter);
-app.use('/users', verifyTelegramData, userRouter);
-app.use('/questions', verifyTelegramData, questionRouter);
+app.use('/users', verifyTelegramData(), userRouter);
+app.use('/questions', verifyTelegramData(), questionRouter);
 
 // Swagger UI
 app.use(openAPIRouter);
