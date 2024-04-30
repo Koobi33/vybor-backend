@@ -62,25 +62,18 @@ export const questionRepository = {
 
       const queryResult = await pool.query(query);
 
-      const questions = queryResult.rows.map(row => ({
-        id: row.id,
-        author: row.player_author_id,
-        locale: row.label_locale,
-        option1: {
-          title: row.a1_locale,
-          votes: row.a1_selection_count,
-          img: row.a1_image_url,
-        },
-        option2: {
-          title: row.a2_locale,
-          votes: row.a2_selection_count,
-          img: row.a2_image_url,
+      const questions = queryResult.rows.map(row => {
+        try {
+          return QuestionSchema.parse(row);
+        } catch (error) {
+          console.error('Error parsing question:', error);
+          return null;
         }
-      }));
+      }).filter(Boolean);
 
-      questions.forEach(question => {
+      /*questions.forEach(question => {
         QuestionSchema.parse(question);
-      });
+      });*/
       
       return questions;
     } catch (error) {
