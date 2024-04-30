@@ -62,10 +62,9 @@ export const questionRepository = {
 
       const queryResult = await pool.query(query);
 
-      const questions = queryResult.rows.map<Question>(row => {
-        //try {
-          //QuestionSchema.parse({
-        return {
+      const questions = queryResult.rows.map(row => {
+        try {
+          QuestionSchema.parse( {
             id: row.id,
             locale: row.label_locale,
             author: row.player_author_id,
@@ -79,11 +78,11 @@ export const questionRepository = {
               votes: row.a1_selection_count,
               img: row.a1_image_url,
             },
-          //})
-        };
-        /*catch {
-          
-        }*/
+          })
+        }
+        catch (error) {
+          console.error('Error fetching questions:', error);
+        }
       });
 
       /*questions.forEach(question => {
