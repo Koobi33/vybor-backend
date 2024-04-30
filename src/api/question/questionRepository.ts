@@ -64,7 +64,7 @@ export const questionRepository = {
 
       const questions = queryResult.rows.map(row => {
         try {
-          return QuestionSchema.parse({
+          /*return QuestionSchema.parse({
             id: row.id,
             locale: row.label_locale,
             author: row.player_author_id,
@@ -78,8 +78,8 @@ export const questionRepository = {
               votes: row.a1_selection_count,
               img: row.a1_image_url,
             }
-          });
-          //return QuestionSchemaTest.parse(row.a1_locale);
+          });*/
+          return QuestionSchemaTest.parse(row.a1_locale);
         }
         catch (error) {
           console.error('Error fetching questions:', error);
