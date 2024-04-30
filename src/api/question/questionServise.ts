@@ -27,7 +27,7 @@ export const questionService = {
       const result = questions.filter(
         (question) =>
           question.locale === user.locale &&
-          question.tags.findIndex((el) => el === 'default') >= 0 &&
+          //question.tags.findIndex((el) => el === 'default') >= 0 &&
           !user.answeredQuestions.some((id) => id === question.id)
       );
       return new ServiceResponse<Question[]>(ResponseStatus.Success, 'questions found', result, StatusCodes.OK);
