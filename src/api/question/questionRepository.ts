@@ -64,8 +64,8 @@ export const questionRepository = {
 
       const questions : Question[] = queryResult.rows.map(row => ({
         id: row.id,
-        author: row.author,
-        locale: row.locale,
+        author: row.player_author_id,
+        locale: row.label_locale,
         option1: {
           title: row.a1_locale,
           votes: row.a1_selection_count,
