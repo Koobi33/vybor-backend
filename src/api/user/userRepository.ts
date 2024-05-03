@@ -155,7 +155,7 @@ export const userRepository = {
         : null;
   },
 
-  updateOneAsync: async (user: User): Promise<User | null> => {
+  updateOneAsync: async (id: number, user: User): Promise<User | null> => {
       try {
           const queryUser = `
             update users 
@@ -198,14 +198,14 @@ export const userRepository = {
               user.locale,
               user.multiplier,
               user.name,
-              user.id
+              id
           ]);
 
           const query = `select * from users u
                      left join players p on u.id = p.user_id
                      where p.user_id is not null and p.id = $1`;
 
-          const result = await pool.query(query, [user.id]);
+          const result = await pool.query(query, [id]);
 
           return result.rows.length
               ? {

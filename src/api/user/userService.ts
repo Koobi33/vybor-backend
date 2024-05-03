@@ -90,7 +90,7 @@ export const userService = {
         data.nextFreeQuestionTime = new Date(new Date().setSeconds(new Date().getSeconds() + FREE_QUESTION_TIMEOUT_SECONDS));
       }
       
-      const updatedUser = await userRepository.updateOneAsync(data);
+      const updatedUser = await userRepository.updateOneAsync(id, data);
 
       if (updatedUser) {
         return new ServiceResponse<User>(ResponseStatus.Success, 'User updated', updatedUser, StatusCodes.OK);
