@@ -77,8 +77,7 @@ export const userRouter: Router = (() => {
 
   router.post('/', async (_req: Request, res: Response) => {
     const createdUser = await userService.addOne(_req.body);
-    serviceResponse = createdUser;
-    handleServiceResponse(serviceResponse, res);
+    handleServiceResponse(createdUser, res);
   });
 
   // UPDATE USER DATA
