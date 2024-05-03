@@ -116,9 +116,9 @@ export const questionRepository = {
         question.option1.title,
         question.option1.votes,
         question.option1.img,
-        question.option1.title,
-        question.option1.votes,
-        question.option1.img,
+        question.option2.title,
+        question.option2.votes,
+        question.option2.img,
         question.id
       ]);
       
