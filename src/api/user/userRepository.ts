@@ -19,8 +19,8 @@ export const userRepository = {
 
       return queryResult.rows.map(row => {
         return {
-          id: row.u.id,
-          playerId: row.p.id,
+          id: row.user_id,
+          playerId: row.id,
           isModerator: row.is_moderator,
           name: row.name,
           score: row.score,
