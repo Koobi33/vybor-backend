@@ -123,10 +123,10 @@ export const userRepository = {
         'tg_id_hash', //todo tg
         data.wallet,
         data.score,
-        0, //5
+        0,
         data.energy,
         data.wallet != null,
-        false, //8
+        false,
         data.nextFreeQuestionTime,
         data.availableQuestions,
         data.fillEnergyTime,

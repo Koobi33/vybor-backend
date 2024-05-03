@@ -134,7 +134,7 @@ export const questionService = {
           multiplier: newMultiplier,
           energy: newEnergy,
         };
-        await userRepository.updateOneAsync(newUser as User);
+        await userRepository.updateOneAsync(newUser.id as number, newUser as User);
       }
 
       const updatedQuestion = await questionRepository.updateOneAsync({

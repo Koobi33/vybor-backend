@@ -53,13 +53,13 @@ export const userService = {
   addOne: async (data: UserCreate): Promise<ServiceResponse<User | null>> => {
     try {
       const user = await userRepository.addOneAsync({
-        id: -1,
-        playerId: -1,
+        id: -1, //ignore
+        playerId: -1, //ignore
         isModerator: false,
         name: data.name,
         score: 0,
         multiplier: 1,
-        wallet: 'tg_wallet', //todo tg
+        wallet: null,
         locale: data.locale,
         energy: MAX_USER_ENERGY,
         maxEnergy: MAX_USER_ENERGY,
