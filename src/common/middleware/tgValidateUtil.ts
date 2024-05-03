@@ -26,8 +26,8 @@ const verifyInitData: RequestHandler = (_req, res, next) => {
   if (calculatedHash === hash) {
     return next();
   }
-  return next();
-  //res.sendStatus(401);
+  
+  res.sendStatus(401);
 };
 
 export default () => [verifyInitData];

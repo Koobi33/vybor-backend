@@ -11,9 +11,9 @@ import { User } from '../user/userModel';
 
 export const questionService = {
   // Retrieves all questions from the database
-  findAll: async (userId: number, questionId?: string): Promise<ServiceResponse<Question[] | null>> => {
+  findAll: async (userId: number, questionId?: number): Promise<ServiceResponse<Question[] | null>> => {
     try {
-      let questions = await questionRepository.findAllAsync();
+      let questions = await questionRepository.findAllAsync(userId);
       if (questionId) {
         const questionIndex = questions.findIndex((question) => question.id === questionId);
         if (questionIndex) {
@@ -25,15 +25,12 @@ export const questionService = {
         return new ServiceResponse(ResponseStatus.Failed, 'Something went wrong', null, StatusCodes.NOT_FOUND);
       }
       
-      const questionsCount = questions.length;
-      
-      /*const result = questions.filter(
+      const result = questions.filter(
         (question) =>
           question.locale === user.locale &&
-          //question.tags.findIndex((el) => el === 'default') >= 0 &&
-          !user.answeredQuestions.some((id) => id === question.id)
-      ); todo*/
-      return new ServiceResponse<Question[]>(ResponseStatus.Success, 'questions found ' + questionsCount, questions, StatusCodes.OK);
+          question.author === 0 // show only default questions
+      );
+      return new ServiceResponse<Question[]>(ResponseStatus.Success, 'questions found ' + result.length, result, StatusCodes.OK);
     } catch (ex) {
       const errorMessage = `Error finding all questions: $${(ex as Error).message}`;
       logger.error(errorMessage);
@@ -55,25 +52,24 @@ export const questionService = {
       return new ServiceResponse(ResponseStatus.Failed, errorMessage, null, StatusCodes.INTERNAL_SERVER_ERROR);
     }
   },
+  
+  
   addOne: async (data: QuestionCreate): Promise<ServiceResponse<Question | null>> => {
     try {
       const question = await questionRepository.addOneAsync({
-        id: uuidv4(),
-        tags: ['users'],
+        id: -1,
         locale: data.locale,
         author: data.author,
         option1: {
           title: data.option1.title,
-          votes: 0,
-          img: null,
+          votes: 1,
+          img: 'empty',
         },
         option2: {
           title: data.option2.title,
-          votes: 0,
-          img: null,
-        },
-        createdAt: new Date(),
-        updatedAt: new Date(),
+          votes: 1,
+          img: 'empty',
+        }
       });
       if (!question) {
         return new ServiceResponse(ResponseStatus.Failed, 'Creation failed', null, StatusCodes.NOT_FOUND);
@@ -85,8 +81,10 @@ export const questionService = {
       return new ServiceResponse(ResponseStatus.Failed, errorMessage, null, StatusCodes.INTERNAL_SERVER_ERROR);
     }
   },
+  
+  
   updateOne: async (
-    id: string,
+    id: number,
     option: 'option1' | 'option2',
     userId: number
   ): Promise<ServiceResponse<Question | null>> => {
@@ -141,6 +139,16 @@ export const questionService = {
           votes: question[option].votes + 1,
         },
       });
+      
+      const newPlayerQuestion = await questionRepository.createNewPlayersQuestion(userId, id);
+
+      if (updatedQuestion == null) {
+        return new ServiceResponse(ResponseStatus.Failed, 'Something went wrong', null, StatusCodes.NOT_FOUND);
+      }
+
+      if (newPlayerQuestion == null) {
+        return new ServiceResponse(ResponseStatus.Failed, 'Something went wrong', null, StatusCodes.NOT_FOUND);
+      }
 
       return new ServiceResponse<Question>(ResponseStatus.Success, 'question updated', updatedQuestion, StatusCodes.OK);
     } catch (ex) {

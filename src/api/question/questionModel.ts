@@ -6,7 +6,6 @@ import { commonValidations } from '@/common/utils/commonValidation';
 extendZodWithOpenApi(z);
 
 export type Question = z.infer<typeof QuestionSchema>;
-export const QuestionSchemaTest = z.string();
 export const QuestionSchema = z.object({
   id: z.number(),
   author: z.number(),
@@ -28,7 +27,7 @@ export const QuestionSchema = z.object({
 
 export type QuestionCreate = z.infer<typeof QuestionCreateSchema>;
 export const QuestionCreateSchema = z.object({
-  author: z.string(),
+  author: z.number(),
   locale: z.string(),
   option1: z.object({
     title: z.string(),
@@ -38,6 +37,12 @@ export const QuestionCreateSchema = z.object({
   }),
 });
 
+export type PlayersQuestion = z.infer<typeof PlayersQuestionSchema>;
+export const PlayersQuestionSchema = z.object({
+  playerId: z.number(),
+  questionId: z.number(),
+});
+
 // Input Validation for 'GET questions/:id' endpoint
 export const GetQuestionSchema = z.object({
   params: z.object({ id: commonValidations.id }),
@@ -45,7 +50,7 @@ export const GetQuestionSchema = z.object({
 
 export const GetQuestionsListSchema = z.object({
   params: z.object({ userId: commonValidations.id }),
-  query: z.object({ id: z.string().nullable() }),
+  query: z.object({ id: z.number().nullable() }),
 });
 
 export const GetQuestionVoteSchema = z.object({
