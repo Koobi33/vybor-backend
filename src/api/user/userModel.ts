@@ -8,6 +8,8 @@ extendZodWithOpenApi(z);
 export type User = z.infer<typeof UserSchema>;
 export const UserSchema = z.object({
   id: z.number(),
+  playerId: z.number(),
+  isModerator: z.boolean(),
   name: z.string(),
   score: z.number(),
   multiplier: z.number(),
@@ -15,10 +17,9 @@ export const UserSchema = z.object({
   locale: z.string(),
   energy: z.number(),
   maxEnergy: z.number(),
-  createdQuestions: z.array(z.string()),
-  answeredQuestions: z.array(z.string()),
-  createdAt: z.date(),
-  updatedAt: z.date(),
+  fillEnergyTime: z.date(),
+  nextFreeQuestionTime: z.date(),
+  availableQuestions: z.number()
 });
 
 export type UserCreate = z.infer<typeof UserCreateSchema>;

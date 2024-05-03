@@ -96,6 +96,10 @@ export const questionService = {
         return new ServiceResponse(ResponseStatus.Failed, 'Something went wrong', null, StatusCodes.NOT_FOUND);
       }
       if (user) {
+        
+        if (!user.wallet && user.energy <= 0)
+          return new ServiceResponse(ResponseStatus.Failed, 'Not enough energy', null, StatusCodes.NOT_ACCEPTABLE);
+        
         function handleMultiplier(user: User, question: Question, option: 'option1' | 'option2') {
           let multiplier = user.multiplier;
           if (option === 'option1') {
@@ -123,11 +127,12 @@ export const questionService = {
           return multiplier;
         }
         const newMultiplier = handleMultiplier(user, question, option);
+        const newEnergy = user.wallet != null ? user.energy : user.energy - 1;
         const newUser = {
           ...user,
           score: newMultiplier > 0 ? user.score + 10 * newMultiplier : user.score + 10 * newMultiplier * -1,
           multiplier: newMultiplier,
-          answeredQuestions: user?.answeredQuestions ? [...user.answeredQuestions, question?.id] : [],
+          energy: newEnergy,
         };
         await userRepository.updateOneAsync(newUser as User);
       }

@@ -1,6 +1,4 @@
-//import { v4 as uuidv4 } from 'uuid';
-
-import {PlayersQuestion, PlayerQuestionCreate, Question} from '@/api/question/questionModel';
+import {PlayersQuestion, Question} from '@/api/question/questionModel';
 
 const pool = require('@/common/db');
 
@@ -36,8 +34,7 @@ export const questionRepository = {
     }
   },
 
-  findByIdAsync: async (id: string): Promise<Question | null> => {
-    //return questions.find((question) => question.id === id) || null;
+  findByIdAsync: async (id: number): Promise<Question | null> => {
     try {
       const query = 'select * from questions where id = $1';
       
@@ -66,8 +63,6 @@ export const questionRepository = {
     }
   },
   addOneAsync: async (question: Question): Promise<Question | null> => {
-    /*questions.push(question);
-    return questions.find((el) => el.id === question.id) || null;*/
     try {
       const query = `
           insert into 
@@ -101,12 +96,6 @@ export const questionRepository = {
     }
   },
   updateOneAsync: async (question: Question): Promise<Question | null> => {
-    /*questions.forEach((element, index) => {
-      if (element.id === question.id) {
-        questions[index] = question;
-      }
-    });
-    return questions.find((el) => el.id === question.id) || null;*/
     try {
       const query = `
       update questions 

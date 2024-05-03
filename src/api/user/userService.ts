@@ -1,7 +1,7 @@
 import { StatusCodes } from 'http-status-codes';
 
 import { User, UserCreate } from '@/api/user/userModel';
-import { userRepository } from '@/api/user/userRepository';
+import {FREE_QUESTION_TIMEOUT_SECONDS, MAX_USER_ENERGY, userRepository} from '@/api/user/userRepository';
 import { ResponseStatus, ServiceResponse } from '@/common/models/serviceResponse';
 import { logger } from '@/server';
 
@@ -13,8 +13,7 @@ export const userService = {
       if (!users) {
         return new ServiceResponse(ResponseStatus.Failed, 'No Users found', null, StatusCodes.NOT_FOUND);
       }
-      const res = users.map((user) => ({ id: user.id, name: user.name, score: user.score }));
-      return new ServiceResponse<User[]>(ResponseStatus.Success, 'Users found', res, StatusCodes.OK);
+      return new ServiceResponse<User[]>(ResponseStatus.Success, 'Users found ' + users.length, users, StatusCodes.OK);
     } catch (ex) {
       const errorMessage = `Error finding all users: $${(ex as Error).message}`;
       logger.error(errorMessage);
@@ -36,23 +35,39 @@ export const userService = {
       return new ServiceResponse(ResponseStatus.Failed, errorMessage, null, StatusCodes.INTERNAL_SERVER_ERROR);
     }
   },
+
+  findByTgId: async (tgId: string): Promise<ServiceResponse<User | null>> => {
+    try {
+      const user = await userRepository.findByTgIdAsync(tgId);
+      if (!user) {
+        return new ServiceResponse(ResponseStatus.Failed, 'User not found', null, StatusCodes.NOT_FOUND);
+      }
+      return new ServiceResponse<User>(ResponseStatus.Success, 'User found', user, StatusCodes.OK);
+    } catch (ex) {
+      const errorMessage = `Error finding user with id ${tgId}:, ${(ex as Error).message}`;
+      logger.error(errorMessage);
+      return new ServiceResponse(ResponseStatus.Failed, errorMessage, null, StatusCodes.INTERNAL_SERVER_ERROR);
+    }
+  },
+  
   addOne: async (data: UserCreate): Promise<ServiceResponse<User | null>> => {
     try {
-      const question = await userRepository.addOneAsync({
-        id: data.id,
-        locale: data.locale,
+      const user = await userRepository.addOneAsync({
+        id: -1,
+        playerId: -1,
+        isModerator: false,
         name: data.name,
         score: 0,
         multiplier: 1,
-        createdQuestions: [],
-        answeredQuestions: [],
-        energy: 5,
-        maxEnergy: 5,
-        wallet: null,
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        wallet: 'tg_wallet', //todo
+        locale: data.locale,
+        energy: MAX_USER_ENERGY,
+        maxEnergy: MAX_USER_ENERGY,
+        fillEnergyTime: new Date(),
+        nextFreeQuestionTime: new Date(new Date().setSeconds(new Date().getSeconds() + FREE_QUESTION_TIMEOUT_SECONDS)),
+        availableQuestions: 1,
       });
-      if (!question) {
+      if (!user) {
         return new ServiceResponse(ResponseStatus.Failed, 'Creation failed', null, StatusCodes.NOT_FOUND);
       }
       return new ServiceResponse<User>(ResponseStatus.Success, 'User created', question, StatusCodes.OK);
@@ -69,13 +84,18 @@ export const userService = {
       if (!user) {
         return new ServiceResponse(ResponseStatus.Failed, 'user not found', null, StatusCodes.NOT_FOUND);
       }
+      
+      if (user.nextFreeQuestionTime < new Date()) {
+        data.availableQuestions++;
+        data.nextFreeQuestionTime = new Date(new Date().setSeconds(new Date().getSeconds() + FREE_QUESTION_TIMEOUT_SECONDS));
+      }
+      
       const updatedUser = await userRepository.updateOneAsync(data);
 
       if (updatedUser) {
         return new ServiceResponse<User>(ResponseStatus.Success, 'User updated', updatedUser, StatusCodes.OK);
       }
-
-      throw new Error();
+      return new ServiceResponse(ResponseStatus.Failed, 'Something went wrong', null, StatusCodes.NOT_FOUND);
     } catch (ex) {
       const errorMessage = `Error finding user with id ${id}:, ${(ex as Error).message}`;
       logger.error(errorMessage);

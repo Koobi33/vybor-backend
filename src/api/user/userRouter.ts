@@ -37,8 +37,23 @@ export const userRouter: Router = (() => {
   });
 
   router.get('/:id', validateRequest(GetUserSchema), async (req: Request, res: Response) => {
-    const id = parseInt(req.params.id as string, 10);
+    const id = parseInt(req.params.id as number, 10);
     const serviceResponse = await userService.findById(id);
+    handleServiceResponse(serviceResponse, res);
+  });
+
+  // GET USER BY TG_ID
+  userRegistry.registerPath({
+    method: 'get',
+    path: '/users/tg/{id}',
+    tags: ['User'],
+    request: { params: GetUserSchema.shape.params },
+    responses: createApiResponse(UserSchema, 'Success'),
+  });
+
+  router.get('/tg/:id', validateRequest(GetUserSchema), async (req: Request, res: Response) => {
+    const id = req.params.id as string;
+    const serviceResponse = await userService.findByTgId(id);
     handleServiceResponse(serviceResponse, res);
   });
 

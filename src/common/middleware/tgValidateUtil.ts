@@ -11,6 +11,7 @@ const verifyInitData: RequestHandler = (_req, res, next) => {
   const urlParams = new URLSearchParams(telegramInitData as string);
 
   const hash = urlParams.get('hash');
+  
   urlParams.delete('hash');
   urlParams.sort();
 
@@ -26,7 +27,7 @@ const verifyInitData: RequestHandler = (_req, res, next) => {
   if (calculatedHash === hash) {
     return next();
   }
-  
+  //return next();
   res.sendStatus(401);
 };
 
