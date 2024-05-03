@@ -76,7 +76,7 @@ export const userRouter: Router = (() => {
 
   router.post('/', async (_req: Request, res: Response) => {
     let serviceResponse;
-    const existedUser = await userService.findById(_req.body.id);
+    const existedUser = await userService.findByIdNullable(_req.body.id);
     if (existedUser) {
       serviceResponse = existedUser;
     } else {

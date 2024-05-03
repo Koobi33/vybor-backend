@@ -36,6 +36,17 @@ export const userService = {
     }
   },
 
+  findByIdNullable: async (id: number): Promise<ServiceResponse<User | null>> => {
+    try {
+      const user = await userRepository.findByIdAsync(id);
+      return new ServiceResponse<User | null>(ResponseStatus.Success, 'User found', user, StatusCodes.OK);
+    } catch (ex) {
+      const errorMessage = `Error finding user with id ${id}:, ${(ex as Error).message}`;
+      logger.error(errorMessage);
+      return new ServiceResponse(ResponseStatus.Failed, errorMessage, null, StatusCodes.INTERNAL_SERVER_ERROR);
+    }
+  },
+
   findByTgId: async (tgId: string): Promise<ServiceResponse<User | null>> => {
     try {
       const user = await userRepository.findByTgIdAsync(tgId);
