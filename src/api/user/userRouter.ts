@@ -6,6 +6,7 @@ import {GetUserSchema, GetUserTgSchema, UserCreateSchema, UserSchema} from '@/ap
 import { userService } from '@/api/user/userService';
 import { createApiResponse } from '@/api-docs/openAPIResponseBuilders';
 import { handleServiceResponse, validateRequest } from '@/common/utils/httpHandlers';
+import {userRepository} from "@/api/user/userRepository";
 
 export const userRegistry = new OpenAPIRegistry();
 
@@ -75,14 +76,8 @@ export const userRouter: Router = (() => {
   });
 
   router.post('/', async (_req: Request, res: Response) => {
-    let serviceResponse;
-    const existedUser = await userService.findByIdNullable(_req.body.id);
-    if (existedUser) {
-      serviceResponse = existedUser;
-    } else {
-      const createdUser = await userService.addOne(_req.body);
-      serviceResponse = createdUser;
-    }
+    const createdUser = await userService.addOne(_req.body);
+    serviceResponse = createdUser;
     handleServiceResponse(serviceResponse, res);
   });
 

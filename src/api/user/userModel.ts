@@ -24,7 +24,6 @@ export const UserSchema = z.object({
 
 export type UserCreate = z.infer<typeof UserCreateSchema>;
 export const UserCreateSchema = z.object({
-  id: z.number(),
   name: z.string(),
   locale: z.string(),
 });
