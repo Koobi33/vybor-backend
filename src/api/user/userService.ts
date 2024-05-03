@@ -59,7 +59,7 @@ export const userService = {
         name: data.name,
         score: 0,
         multiplier: 1,
-        wallet: 'tg_wallet', //todo
+        wallet: 'tg_wallet', //todo tg
         locale: data.locale,
         energy: MAX_USER_ENERGY,
         maxEnergy: MAX_USER_ENERGY,

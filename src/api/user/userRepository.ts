@@ -119,8 +119,8 @@ export const userRepository = {
             limit 1;`;
 
     await pool.query(query, [
-        'tg_id', //todo
-        'tg_id_hash', //todo
+        'tg_id', //todo tg
+        'tg_id_hash', //todo tg
         data.wallet,
         data.score,
         0, //5
@@ -166,8 +166,8 @@ export const userRepository = {
             where id = $4`;
 
           await pool.query(queryUser, [
-              'tg_id', //todo
-              'tg_id_hash', //todo,
+              'tg_id', //todo tg
+              'tg_id_hash', //todo tg
               user.wallet,
               user.id
           ]);
