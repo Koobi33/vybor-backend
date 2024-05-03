@@ -39,7 +39,7 @@ export const questionService = {
   },
 
   // Retrieves a single question by their ID
-  findById: async (id: string): Promise<ServiceResponse<Question | null>> => {
+  findById: async (id: number): Promise<ServiceResponse<Question | null>> => {
     try {
       const question = await questionRepository.findByIdAsync(id);
       if (!question) {
