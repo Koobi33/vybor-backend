@@ -109,30 +109,32 @@ export const userRepository = {
         insert into players (user_id, score, coins, energy, is_wallet_connected, is_moderator, next_free_question_time,
                              available_questions, fill_energy_time, locale, current_strick, name)
         select id, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14
-        from newUserId;
-    
+        from newUserId;`
+
+    const selectQuery = `
         select * from users u
             left join players p on u.id = p.user_id
             where p.user_id is not null
             order by u.id desc
             limit 1;`;
 
-    const result = await pool.query(query, [
+    await pool.query(query, [
         'tg_id', //todo
         'tg_id_hash', //todo
         data.wallet,
         data.score,
-        data.multiplier,
-        MAX_USER_ENERGY,
+        0, //5
+        data.energy,
         data.wallet != null,
-        false,
+        false, //8
         data.nextFreeQuestionTime,
         data.availableQuestions,
         data.fillEnergyTime,
         data.locale,
         data.multiplier,
-        data.name
-    ]);
+        data.name]);
+    
+    const result = await pool.query(selectQuery);
 
     return result.rows.length
         ? {
