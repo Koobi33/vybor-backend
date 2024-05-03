@@ -51,7 +51,7 @@ export const userRouter: Router = (() => {
     responses: createApiResponse(UserSchema, 'Success'),
   });
 
-  router.get('/tg/:id', validateRequest(GetUserSchema), async (req: Request, res: Response) => {
+  router.get('/tg/:id', validateRequest(GetUserTgSchema), async (req: Request, res: Response) => {
     const id = req.params.id as string;
     const serviceResponse = await userService.findByTgId(id);
     handleServiceResponse(serviceResponse, res);
