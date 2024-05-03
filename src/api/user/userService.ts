@@ -70,7 +70,7 @@ export const userService = {
       if (!user) {
         return new ServiceResponse(ResponseStatus.Failed, 'Creation failed', null, StatusCodes.NOT_FOUND);
       }
-      return new ServiceResponse<User>(ResponseStatus.Success, 'User created', question, StatusCodes.OK);
+      return new ServiceResponse<User>(ResponseStatus.Success, 'User created', user, StatusCodes.OK);
     } catch (ex) {
       const errorMessage = `Error user creation, ${(ex as Error).message}`;
       logger.error(errorMessage);
