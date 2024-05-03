@@ -50,8 +50,8 @@ export const userRepository = {
 
       return result.rows.length
           ? {
-            id: result.rows[0].u.id,
-            playerId: result.rows[0].p.id,
+            id: result.rows[0].user_id,
+            playerId: result.rows[0].id,
             isModerator: result.rows[0].is_moderator,
             name: result.rows[0].name,
             score: result.rows[0].score,
@@ -80,8 +80,8 @@ export const userRepository = {
     
     return result.rows.length
         ? {
-          id: result.rows[0].u.id,
-          playerId: result.rows[0].p.id,
+          id: result.rows[0].user_id,
+          playerId: result.rows[0].id,
           isModerator: result.rows[0].is_moderator,
           name: result.rows[0].name,
           score: result.rows[0].score,
@@ -136,8 +136,8 @@ export const userRepository = {
 
     return result.rows.length
         ? {
-          id: result.rows[0].u.id,
-          playerId: result.rows[0].p.id,
+          id: result.rows[0].user_id,
+          playerId: result.rows[0].id,
           isModerator: result.rows[0].is_moderator,
           name: result.rows[0].name,
           score: result.rows[0].score,
@@ -207,8 +207,8 @@ export const userRepository = {
 
           return result.rows.length
               ? {
-                  id: result.rows[0].u.id,
-                  playerId: result.rows[0].p.id,
+                  id: result.rows[0].user_id,
+                  playerId: result.rows[0].id,
                   isModerator: result.rows[0].is_moderator,
                   name: result.rows[0].name,
                   score: result.rows[0].score,
