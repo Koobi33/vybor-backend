@@ -1,7 +1,6 @@
 import { z } from 'zod';
 
 export const commonValidations = {
-  id: z
-    .string(),
+  id: z.number(),
   option: z.string()
 };

@@ -7,10 +7,10 @@ extendZodWithOpenApi(z);
 
 export type Question = z.infer<typeof QuestionSchema>;
 export const QuestionSchema = z.object({
-  id: z.string(),
-  author: z.string(),
+  id: z.number(),
+  author: z.number(),
   locale: z.string(),
-  tags: z.array(z.string()),
+  //tags: z.array(z.string()),
   option1: z.object({
     title: z.string(),
     votes: z.number(),
@@ -21,13 +21,13 @@ export const QuestionSchema = z.object({
     votes: z.number(),
     img: z.string().nullable(),
   }),
-  createdAt: z.date(),
-  updatedAt: z.date(),
+  //createdAt: z.date(),
+  //updatedAt: z.date(),
 });
 
 export type QuestionCreate = z.infer<typeof QuestionCreateSchema>;
 export const QuestionCreateSchema = z.object({
-  author: z.string(),
+  author: z.number(),
   locale: z.string(),
   option1: z.object({
     title: z.string(),
@@ -35,6 +35,12 @@ export const QuestionCreateSchema = z.object({
   option2: z.object({
     title: z.string(),
   }),
+});
+
+export type PlayersQuestion = z.infer<typeof PlayersQuestionSchema>;
+export const PlayersQuestionSchema = z.object({
+  playerId: z.number(),
+  questionId: z.number(),
 });
 
 // Input Validation for 'GET questions/:id' endpoint
@@ -44,7 +50,7 @@ export const GetQuestionSchema = z.object({
 
 export const GetQuestionsListSchema = z.object({
   params: z.object({ userId: commonValidations.id }),
-  query: z.object({ id: z.string().nullable() }),
+  query: z.object({ id: z.number().nullable() }),
 });
 
 export const GetQuestionVoteSchema = z.object({
