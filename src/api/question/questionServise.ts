@@ -22,15 +22,19 @@ export const questionService = {
       }
       const user = await userRepository.findByIdAsync(userId);
       if (!user || !questions) {
+        console.log({ user, questions });
         return new ServiceResponse(ResponseStatus.Failed, 'Something went wrong', null, StatusCodes.NOT_FOUND);
       }
-      
+
       const result = questions.filter(
-        (question) =>
-          question.locale === user.locale &&
-          question.author === 0 // show only default questions
+        (question) => question.locale === user.locale && question.author === 0 // show only default questions
       );
-      return new ServiceResponse<Question[]>(ResponseStatus.Success, 'questions found ' + result.length, result, StatusCodes.OK);
+      return new ServiceResponse<Question[]>(
+        ResponseStatus.Success,
+        'questions found ' + result.length,
+        result,
+        StatusCodes.OK
+      );
     } catch (ex) {
       const errorMessage = `Error finding all questions: $${(ex as Error).message}`;
       logger.error(errorMessage);
@@ -52,8 +56,7 @@ export const questionService = {
       return new ServiceResponse(ResponseStatus.Failed, errorMessage, null, StatusCodes.INTERNAL_SERVER_ERROR);
     }
   },
-  
-  
+
   addOne: async (data: QuestionCreate): Promise<ServiceResponse<Question | null>> => {
     try {
       const question = await questionRepository.addOneAsync({
@@ -69,7 +72,7 @@ export const questionService = {
           title: data.option2.title,
           votes: 1,
           img: 'empty',
-        }
+        },
       });
       if (!question) {
         return new ServiceResponse(ResponseStatus.Failed, 'Creation failed', null, StatusCodes.NOT_FOUND);
@@ -81,8 +84,7 @@ export const questionService = {
       return new ServiceResponse(ResponseStatus.Failed, errorMessage, null, StatusCodes.INTERNAL_SERVER_ERROR);
     }
   },
-  
-  
+
   updateOne: async (
     id: number,
     option: 'option1' | 'option2',
@@ -96,10 +98,9 @@ export const questionService = {
         return new ServiceResponse(ResponseStatus.Failed, 'Something went wrong', null, StatusCodes.NOT_FOUND);
       }
       if (user) {
-        
         if (!user.wallet && user.energy <= 0)
           return new ServiceResponse(ResponseStatus.Failed, 'Not enough energy', null, StatusCodes.NOT_ACCEPTABLE);
-        
+
         function handleMultiplier(user: User, question: Question, option: 'option1' | 'option2') {
           let multiplier = user.multiplier;
           if (option === 'option1') {
@@ -144,7 +145,7 @@ export const questionService = {
           votes: question[option].votes + 1,
         },
       });
-      
+
       const newPlayerQuestion = await questionRepository.createNewPlayersQuestion(userId, id);
 
       if (updatedQuestion == null) {
