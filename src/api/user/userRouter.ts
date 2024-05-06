@@ -2,11 +2,11 @@ import { OpenAPIRegistry } from '@asteasolutions/zod-to-openapi';
 import express, { Request, Response, Router } from 'express';
 import { z } from 'zod';
 
-import {GetUserSchema, GetUserTgSchema, UserCreateSchema, UserSchema} from '@/api/user/userModel';
+import { GetUserSchema, GetUserTgSchema, UserCreateSchema, UserSchema } from '@/api/user/userModel';
 import { userService } from '@/api/user/userService';
 import { createApiResponse } from '@/api-docs/openAPIResponseBuilders';
 import { handleServiceResponse, validateRequest } from '@/common/utils/httpHandlers';
-import {userRepository} from "@/api/user/userRepository";
+import { userRepository } from '@/api/user/userRepository';
 
 export const userRegistry = new OpenAPIRegistry();
 
@@ -72,7 +72,7 @@ export const userRouter: Router = (() => {
         },
       },
     },
-    responses: createApiResponse(UserSchema, 'Success'),
+    responses: createApiResponse(UserCreateSchema, 'Success'),
   });
 
   router.post('/', async (_req: Request, res: Response) => {
