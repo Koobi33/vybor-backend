@@ -72,7 +72,7 @@ export const userRouter: Router = (() => {
         },
       },
     },
-    responses: createApiResponse(UserCreateSchema, 'Success'),
+    responses: createApiResponse(UserSchema, 'Success'),
   });
 
   router.post('/', async (_req: Request, res: Response) => {
