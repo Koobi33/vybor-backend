@@ -88,10 +88,11 @@ export const questionService = {
     id: number,
     option: 'option1' | 'option2',
     userId: number
-  ): Promise<ServiceResponse<Question | null>> => {
+  ): Promise<ServiceResponse<User | null>> => {
     try {
       const question = await questionRepository.findByIdAsync(id);
       const user = await userRepository.findByIdAsync(userId);
+      let newUser: User;
 
       if (!question || !user) {
         return new ServiceResponse(ResponseStatus.Failed, 'Something went wrong', null, StatusCodes.NOT_FOUND);
@@ -128,7 +129,7 @@ export const questionService = {
         }
         const newMultiplier = handleMultiplier(user, question, option);
         const newEnergy = user.wallet != null ? user.energy : user.energy - 1;
-        const newUser = {
+        newUser = {
           ...user,
           score: newMultiplier > 0 ? user.score + 10 * newMultiplier : user.score + 10 * newMultiplier * -1,
           multiplier: newMultiplier,
@@ -155,7 +156,7 @@ export const questionService = {
         return new ServiceResponse(ResponseStatus.Failed, 'Something went wrong', null, StatusCodes.NOT_FOUND);
       }
 
-      return new ServiceResponse<Question>(ResponseStatus.Success, 'question updated', updatedQuestion, StatusCodes.OK);
+      return new ServiceResponse<User>(ResponseStatus.Success, 'question updated', newUser, StatusCodes.OK);
     } catch (ex) {
       const errorMessage = `Error finding question with id ${id}:, ${(ex as Error).message}`;
       logger.error(errorMessage);

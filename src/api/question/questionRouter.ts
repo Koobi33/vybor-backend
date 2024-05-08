@@ -13,6 +13,7 @@ import { questionService } from '@/api/question/questionServise';
 import { createApiResponse } from '@/api-docs/openAPIResponseBuilders';
 import { handleServiceResponse, validateRequest } from '@/common/utils/httpHandlers';
 import { parseTelegramData } from '@/common/utils/parseTelegramData';
+import {UserSchema} from "@/api/user/userModel";
 
 export const questionRegistry = new OpenAPIRegistry();
 
@@ -82,7 +83,7 @@ export const questionRouter: Router = (() => {
       headers: GetQuestionVoteSchema.shape.headers,
       params: GetQuestionVoteSchema.shape.params,
     },
-    responses: createApiResponse(QuestionSchema, 'Success'),
+    responses: createApiResponse(UserSchema, 'Success'),
   });
 
   router.post('/:id/:option', async (_req: Request, res: Response) => {
