@@ -90,6 +90,8 @@ export const questionService = {
     option: 'option1' | 'option2',
     userId: number
   ): Promise<ServiceResponse<Question | null>> => {
+    console.log('PARAMS_ID', id, option, userId);
+
     try {
       const question = await questionRepository.findByIdAsync(id);
       const user = await userRepository.findByIdAsync(userId);
