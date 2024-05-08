@@ -88,7 +88,7 @@ export const questionRouter: Router = (() => {
 
   router.post('/:id/:option', async (_req: Request, res: Response) => {
     const serviceResponse = await questionService.updateOne(
-      _req.params.id,
+      Number(_req.params.id),
       _req.params.option as 'option1' | 'option2',
       Number(_req.headers.userid)
     );

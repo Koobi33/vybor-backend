@@ -14,10 +14,10 @@ export const userRepository = {
           where p.user_id is not null`;
 
       const queryResult = await pool.query(query);
-      
+
       console.log(queryResult.rows);
 
-      return queryResult.rows.map(row => {
+      return queryResult.rows.map((row: any) => {
         return {
           id: row.user_id,
           playerId: row.id,
@@ -41,6 +41,7 @@ export const userRepository = {
   },
 
   findByIdAsync: async (id: number): Promise<User | null> => {
+    //TODO: fix
     try {
       const query = `select * from users u
                      left join players p on u.id = p.user_id
@@ -49,7 +50,7 @@ export const userRepository = {
       const result = await pool.query(query, [id]);
 
       return result.rows.length
-          ? {
+        ? {
             id: result.rows[0].user_id,
             playerId: result.rows[0].id,
             isModerator: result.rows[0].is_moderator,
@@ -64,41 +65,41 @@ export const userRepository = {
             nextFreeQuestionTime: result.rows[0].next_free_question_time,
             availableQuestions: result.rows[0].available_questions,
           }
-          : null;
+        : null;
     } catch (error) {
       console.error('Error fetching questions:', error);
       throw error;
     }
   },
   findByTgIdAsync: async (tgId: string): Promise<User | null> => {
-  try {
-    const query = `select * from users u
+    try {
+      const query = `select * from users u
                    left join players p on u.id = p.user_id
                    where p.user_id is not null and u.tg_id = $1`;
-    
-    const result = await pool.query(query, [tgId]);
-    
-    return result.rows.length
+
+      const result = await pool.query(query, [tgId]);
+
+      return result.rows.length
         ? {
-          id: result.rows[0].user_id,
-          playerId: result.rows[0].id,
-          isModerator: result.rows[0].is_moderator,
-          name: result.rows[0].name,
-          score: result.rows[0].score,
-          multiplier: result.rows[0].current_strick,
-          wallet: result.rows[0].wallet_id,
-          locale: result.rows[0].locale,
-          energy: result.rows[0].energy,
-          maxEnergy: MAX_USER_ENERGY,
-          fillEnergyTime: result.rows[0].fill_energy_time,
-          nextFreeQuestionTime: result.rows[0].next_free_question_time,
-          availableQuestions: result.rows[0].available_questions,
-        }
+            id: result.rows[0].user_id,
+            playerId: result.rows[0].id,
+            isModerator: result.rows[0].is_moderator,
+            name: result.rows[0].name,
+            score: result.rows[0].score,
+            multiplier: result.rows[0].current_strick,
+            wallet: result.rows[0].wallet_id,
+            locale: result.rows[0].locale,
+            energy: result.rows[0].energy,
+            maxEnergy: MAX_USER_ENERGY,
+            fillEnergyTime: result.rows[0].fill_energy_time,
+            nextFreeQuestionTime: result.rows[0].next_free_question_time,
+            availableQuestions: result.rows[0].available_questions,
+          }
         : null;
-  } catch (error) {
-    console.error('Error fetching questions:', error);
-    throw error;
-  }
+    } catch (error) {
+      console.error('Error fetching questions:', error);
+      throw error;
+    }
   },
 
   addOneAsync: async (data: User): Promise<User | null> => {
@@ -109,7 +110,7 @@ export const userRepository = {
         insert into players (user_id, score, coins, energy, is_wallet_connected, is_moderator, next_free_question_time,
                              available_questions, fill_energy_time, locale, current_strick, name)
         select id, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14
-        from newUserId;`
+        from newUserId;`;
 
     const selectQuery = `
         select * from users u
@@ -119,25 +120,26 @@ export const userRepository = {
             limit 1;`;
 
     await pool.query(query, [
-        'tg_id', //todo tg
-        'tg_id_hash', //todo tg
-        data.wallet,
-        data.score,
-        0,
-        data.energy,
-        data.wallet != null,
-        false,
-        data.nextFreeQuestionTime,
-        data.availableQuestions,
-        data.fillEnergyTime,
-        data.locale,
-        data.multiplier,
-        data.name]);
-    
+      'tg_id', //todo tg
+      'tg_id_hash', //todo tg
+      data.wallet,
+      data.score,
+      0,
+      data.energy,
+      data.wallet != null,
+      false,
+      data.nextFreeQuestionTime,
+      data.availableQuestions,
+      data.fillEnergyTime,
+      data.locale,
+      data.multiplier,
+      data.name,
+    ]);
+
     const result = await pool.query(selectQuery);
 
     return result.rows.length
-        ? {
+      ? {
           id: result.rows[0].user_id,
           playerId: result.rows[0].id,
           isModerator: result.rows[0].is_moderator,
@@ -152,12 +154,12 @@ export const userRepository = {
           nextFreeQuestionTime: result.rows[0].next_free_question_time,
           availableQuestions: result.rows[0].available_questions,
         }
-        : null;
+      : null;
   },
 
   updateOneAsync: async (id: number, user: User): Promise<User | null> => {
-      try {
-          const queryUser = `
+    try {
+      const queryUser = `
             update users 
             set 
                 tg_id = $1, 
@@ -165,14 +167,14 @@ export const userRepository = {
                 wallet_id = $3
             where id = $4`;
 
-          await pool.query(queryUser, [
-              'tg_id', //todo tg
-              'tg_id_hash', //todo tg
-              user.wallet,
-              user.id
-          ]);
+      await pool.query(queryUser, [
+        'tg_id', //todo tg
+        'tg_id_hash', //todo tg
+        user.wallet,
+        user.id,
+      ]);
 
-          const queryPlayer = `
+      const queryPlayer = `
             update players 
             set 
                 score = $1, 
@@ -187,47 +189,47 @@ export const userRepository = {
                 name = $10
             where id = $11`;
 
-          await pool.query(queryPlayer, [
-              user.score,
-              user.energy,
-              user.wallet != null,
-              user.id == 0,
-              user.nextFreeQuestionTime,
-              user.availableQuestions,
-              user.fillEnergyTime,
-              user.locale,
-              user.multiplier,
-              user.name,
-              id
-          ]);
+      await pool.query(queryPlayer, [
+        user.score,
+        user.energy,
+        user.wallet != null,
+        user.id == 0,
+        user.nextFreeQuestionTime,
+        user.availableQuestions,
+        user.fillEnergyTime,
+        user.locale,
+        user.multiplier,
+        user.name,
+        id,
+      ]);
 
-          const query = `select * from users u
+      const query = `select * from users u
                      left join players p on u.id = p.user_id
                      where p.user_id is not null and p.id = $1`;
 
-          const result = await pool.query(query, [id]);
+      const result = await pool.query(query, [id]);
 
-          return result.rows.length
-              ? {
-                  id: result.rows[0].user_id,
-                  playerId: result.rows[0].id,
-                  isModerator: result.rows[0].is_moderator,
-                  name: result.rows[0].name,
-                  score: result.rows[0].score,
-                  multiplier: result.rows[0].current_strick,
-                  wallet: result.rows[0].wallet_id,
-                  locale: result.rows[0].locale,
-                  energy: result.rows[0].energy,
-                  maxEnergy: MAX_USER_ENERGY,
-                  fillEnergyTime: result.rows[0].fill_energy_time,
-                  nextFreeQuestionTime: result.rows[0].next_free_question_time,
-                  availableQuestions: result.rows[0].available_questions,
-              }
-              : null;
-      } catch (error) {
-          // Handling errors
-          console.error('Error updating question:', error);
-          throw error;
-      }
+      return result.rows.length
+        ? {
+            id: result.rows[0].user_id,
+            playerId: result.rows[0].id,
+            isModerator: result.rows[0].is_moderator,
+            name: result.rows[0].name,
+            score: result.rows[0].score,
+            multiplier: result.rows[0].current_strick,
+            wallet: result.rows[0].wallet_id,
+            locale: result.rows[0].locale,
+            energy: result.rows[0].energy,
+            maxEnergy: MAX_USER_ENERGY,
+            fillEnergyTime: result.rows[0].fill_energy_time,
+            nextFreeQuestionTime: result.rows[0].next_free_question_time,
+            availableQuestions: result.rows[0].available_questions,
+          }
+        : null;
+    } catch (error) {
+      // Handling errors
+      console.error('Error updating question:', error);
+      throw error;
+    }
   },
 };
