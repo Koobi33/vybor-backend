@@ -15,8 +15,6 @@ export const userRepository = {
 
       const queryResult = await pool.query(query);
 
-      console.log(queryResult.rows);
-
       return queryResult.rows.map((row: any) => {
         return {
           id: row.user_id,

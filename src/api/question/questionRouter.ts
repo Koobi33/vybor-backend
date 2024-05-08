@@ -32,7 +32,6 @@ export const questionRouter: Router = (() => {
 
   router.get('/', async (_req: Request, res: Response) => {
     const tgData = parseTelegramData(_req.headers['tg-init-data'] as string);
-    console.log(_req.headers, tgData);
     const serviceResponse = await questionService.findAll(Number(_req.headers.userid), Number(_req.query.id));
     handleServiceResponse(serviceResponse, res);
   });
