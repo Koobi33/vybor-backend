@@ -16,7 +16,7 @@ export const userRepository = {
 
       const queryResult = await pool.query(query);
 
-      return queryResult.rows.map((row: any) => {
+      const res = queryResult.rows.map((row: any) => {
         return {
           id: row.user_id,
           playerId: row.id,
@@ -33,6 +33,7 @@ export const userRepository = {
           availableQuestions: row.available_questions,
         };
       });
+      return res.sort((a: User, b: User) => a.score - b.score);
     } catch (error) {
       console.error('Error fetching users:', error);
       throw error;
