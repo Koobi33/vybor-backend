@@ -7,7 +7,7 @@ import { userService } from '@/api/user/userService';
 import { createApiResponse } from '@/api-docs/openAPIResponseBuilders';
 import { handleServiceResponse, validateRequest } from '@/common/utils/httpHandlers';
 import { userRepository } from '@/api/user/userRepository';
-import {parseTelegramData} from "@/common/utils/parseTelegramData";
+import { parseTelegramData } from '@/common/utils/parseTelegramData';
 
 export const userRegistry = new OpenAPIRegistry();
 
@@ -54,7 +54,7 @@ export const userRouter: Router = (() => {
   });
 
   router.get('/tg/:id', validateRequest(GetUserTgSchema), async (req: Request, res: Response) => {
-    const id = req.params.id as string;
+    const id = Number(req.params.id);
     const serviceResponse = await userService.findByTgId(id);
     handleServiceResponse(serviceResponse, res);
   });

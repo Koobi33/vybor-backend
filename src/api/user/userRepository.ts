@@ -70,7 +70,7 @@ export const userRepository = {
       throw error;
     }
   },
-  findByTgIdAsync: async (tgId: string): Promise<User | null> => {
+  findByTgIdAsync: async (tgId: number): Promise<User | null> => {
     console.log('DEBUG TG', tgId);
     try {
       const query = `select * from users u

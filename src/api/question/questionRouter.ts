@@ -13,7 +13,7 @@ import { questionService } from '@/api/question/questionServise';
 import { createApiResponse } from '@/api-docs/openAPIResponseBuilders';
 import { handleServiceResponse, validateRequest } from '@/common/utils/httpHandlers';
 import { parseTelegramData } from '@/common/utils/parseTelegramData';
-import {UserSchema} from "@/api/user/userModel";
+import { UserSchema } from '@/api/user/userModel';
 
 export const questionRegistry = new OpenAPIRegistry();
 
@@ -90,7 +90,7 @@ export const questionRouter: Router = (() => {
     const serviceResponse = await questionService.updateOne(
       Number(_req.params.id),
       _req.params.option as 'option1' | 'option2',
-      Number(_req.headers.userid)
+      parseTelegramData(_req.headers['tg-init-data'] as string)
     );
     handleServiceResponse(serviceResponse, res);
   });

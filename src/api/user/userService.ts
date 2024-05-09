@@ -1,10 +1,10 @@
 import { StatusCodes } from 'http-status-codes';
 
 import { User, UserCreate } from '@/api/user/userModel';
-import {FREE_QUESTION_TIMEOUT_SECONDS, MAX_USER_ENERGY, userRepository} from '@/api/user/userRepository';
+import { FREE_QUESTION_TIMEOUT_SECONDS, MAX_USER_ENERGY, userRepository } from '@/api/user/userRepository';
 import { ResponseStatus, ServiceResponse } from '@/common/models/serviceResponse';
 import { logger } from '@/server';
-import {InitDataParsed} from "@tma.js/sdk";
+import { InitDataParsed } from '@tma.js/sdk';
 
 export const userService = {
   // Retrieves all users from the database
@@ -37,9 +37,9 @@ export const userService = {
     }
   },
 
-  findByTgId: async (tgId: string): Promise<ServiceResponse<User | null>> => {
+  findByTgId: async (tgId: number): Promise<ServiceResponse<User | null>> => {
     try {
-      if (tgId === undefined || tgId === 'undefined') {
+      if (!tgId) {
         return new ServiceResponse(ResponseStatus.Failed, 'Tg id is undefined', null, StatusCodes.NOT_FOUND);
       }
       const user = await userRepository.findByTgIdAsync(tgId);
@@ -53,24 +53,29 @@ export const userService = {
       return new ServiceResponse(ResponseStatus.Failed, errorMessage, null, StatusCodes.INTERNAL_SERVER_ERROR);
     }
   },
-  
+
   addOne: async (data: UserCreate, tgData: InitDataParsed): Promise<ServiceResponse<User | null>> => {
     try {
-      const user = await userRepository.addOneAsync({
-        id: -1, //ignore
-        playerId: -1, //ignore
-        isModerator: false,
-        name: data.name,
-        score: 0,
-        multiplier: 1,
-        wallet: null,
-        locale: data.locale,
-        energy: MAX_USER_ENERGY,
-        maxEnergy: MAX_USER_ENERGY,
-        fillEnergyTime: new Date(),
-        nextFreeQuestionTime: new Date(new Date().setSeconds(new Date().getSeconds() + FREE_QUESTION_TIMEOUT_SECONDS)),
-        availableQuestions: 1,
-      }, tgData);
+      const user = await userRepository.addOneAsync(
+        {
+          id: -1, //ignore
+          playerId: -1, //ignore
+          isModerator: false,
+          name: data.name,
+          score: 0,
+          multiplier: 1,
+          wallet: null,
+          locale: data.locale,
+          energy: MAX_USER_ENERGY,
+          maxEnergy: MAX_USER_ENERGY,
+          fillEnergyTime: new Date(),
+          nextFreeQuestionTime: new Date(
+            new Date().setSeconds(new Date().getSeconds() + FREE_QUESTION_TIMEOUT_SECONDS)
+          ),
+          availableQuestions: 1,
+        },
+        tgData
+      );
       if (!user) {
         return new ServiceResponse(ResponseStatus.Failed, 'Creation failed', null, StatusCodes.NOT_FOUND);
       }
@@ -88,12 +93,14 @@ export const userService = {
       if (!user) {
         return new ServiceResponse(ResponseStatus.Failed, 'user not found', null, StatusCodes.NOT_FOUND);
       }
-      
+
       if (user.nextFreeQuestionTime < new Date()) {
         data.availableQuestions++;
-        data.nextFreeQuestionTime = new Date(new Date().setSeconds(new Date().getSeconds() + FREE_QUESTION_TIMEOUT_SECONDS));
+        data.nextFreeQuestionTime = new Date(
+          new Date().setSeconds(new Date().getSeconds() + FREE_QUESTION_TIMEOUT_SECONDS)
+        );
       }
-      
+
       const updatedUser = await userRepository.updateOneAsync(id, data, tgData);
 
       if (updatedUser) {

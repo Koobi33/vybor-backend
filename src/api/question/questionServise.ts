@@ -1,4 +1,4 @@
-import { v4 as uuidv4 } from 'uuid';
+import { InitDataParsed } from '@tma.js/sdk';
 
 import { StatusCodes } from 'http-status-codes';
 
@@ -87,11 +87,11 @@ export const questionService = {
   updateOne: async (
     id: number,
     option: 'option1' | 'option2',
-    userId: number
+    tgData: InitDataParsed
   ): Promise<ServiceResponse<User | null>> => {
     try {
       const question = await questionRepository.findByIdAsync(id);
-      const user = await userRepository.findByIdAsync(userId);
+      const user = await userRepository.findByTgIdAsync(tgData.user?.id!);
       let newUser: User;
 
       if (!question || !user) {
