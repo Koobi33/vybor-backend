@@ -7,6 +7,7 @@ import { userService } from '@/api/user/userService';
 import { createApiResponse } from '@/api-docs/openAPIResponseBuilders';
 import { handleServiceResponse, validateRequest } from '@/common/utils/httpHandlers';
 import { userRepository } from '@/api/user/userRepository';
+import {parseTelegramData} from "@/common/utils/parseTelegramData";
 
 export const userRegistry = new OpenAPIRegistry();
 
@@ -58,6 +59,20 @@ export const userRouter: Router = (() => {
     handleServiceResponse(serviceResponse, res);
   });
 
+  userRegistry.registerPath({
+    method: 'get',
+    path: '/users/tg',
+    tags: ['User'],
+    responses: createApiResponse(UserSchema, 'Success'),
+  });
+
+  router.get('/tg', async (req: Request, res: Response) => {
+    const tgData = parseTelegramData(_req.headers['tg-init-data'] as string);
+    const id = tgData?.user?.id as string;
+    const serviceResponse = await userService.findByTgId(id);
+    handleServiceResponse(serviceResponse, res);
+  });
+
   // CREATE USER
   userRegistry.registerPath({
     method: 'post',
@@ -76,7 +91,8 @@ export const userRouter: Router = (() => {
   });
 
   router.post('/', async (_req: Request, res: Response) => {
-    const createdUser = await userService.addOne(_req.body);
+    const tgData = parseTelegramData(_req.headers['tg-init-data'] as string);
+    const createdUser = await userService.addOne(_req.body, tgData);
     handleServiceResponse(createdUser, res);
   });
 
@@ -99,7 +115,8 @@ export const userRouter: Router = (() => {
   });
 
   router.post('/:id', async (_req: Request, res: Response) => {
-    const serviceResponse = await userService.updateOne(Number(_req.params.id), _req.body);
+    const tgData = parseTelegramData(_req.headers['tg-init-data'] as string);
+    const serviceResponse = await userService.updateOne(Number(_req.params.id), _req.body, tgData);
     handleServiceResponse(serviceResponse, res);
   });
 
