@@ -119,7 +119,7 @@ export const userRepository = {
             limit 1;`;
 
     await pool.query(query, [
-      tgData.user?.id as string,
+      String(tgData.user?.id),
       'tg_id_hash', //todo tgHash
       data.wallet,
       data.score,

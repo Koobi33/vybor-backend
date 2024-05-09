@@ -94,7 +94,7 @@ export const questionService = {
     try {
       const question = await questionRepository.findByIdAsync(id);
       const user = await userRepository.findByTgIdAsync(tgData?.user?.id!);
-      let newUser: User;
+      let newUser: User | null = null;
 
       if (!question || !user) {
         return new ServiceResponse(ResponseStatus.Failed, 'Something went wrong', null, StatusCodes.NOT_FOUND);
@@ -148,7 +148,7 @@ export const questionService = {
         },
       });
 
-      const newPlayerQuestion = await questionRepository.createNewPlayersQuestion(userId, id);
+      const newPlayerQuestion = await questionRepository.createNewPlayersQuestion(user.playerId, id);
 
       if (updatedQuestion == null) {
         return new ServiceResponse(ResponseStatus.Failed, 'Something went wrong', null, StatusCodes.NOT_FOUND);
@@ -158,7 +158,7 @@ export const questionService = {
         return new ServiceResponse(ResponseStatus.Failed, 'Something went wrong', null, StatusCodes.NOT_FOUND);
       }
 
-      return new ServiceResponse<User>(ResponseStatus.Success, 'question updated', newUser, StatusCodes.OK);
+      return new ServiceResponse<User | null>(ResponseStatus.Success, 'question updated', newUser, StatusCodes.OK);
     } catch (ex) {
       const errorMessage = `Error finding question with id ${id}:, ${(ex as Error).message}`;
       logger.error(errorMessage);
