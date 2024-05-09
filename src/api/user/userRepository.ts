@@ -208,7 +208,7 @@ export const userRepository = {
 
       const result = await pool.query(query, [id]);
 
-      console.log("DEBUG SCORE" {debug_user, debug_player })
+      console.log('DEBUG SCORE', { debug_user, debug_player });
       return result.rows.length
         ? {
             id: result.rows[0].user_id,
