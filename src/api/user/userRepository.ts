@@ -33,7 +33,7 @@ export const userRepository = {
           availableQuestions: row.available_questions,
         };
       });
-      return res.sort((a: User, b: User) => a.score - b.score);
+      return res.sort((a: User, b: User) => b.score - a.score);
     } catch (error) {
       console.error('Error fetching users:', error);
       throw error;
