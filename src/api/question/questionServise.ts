@@ -89,8 +89,6 @@ export const questionService = {
     option: 'option1' | 'option2',
     tgData: InitDataParsed
   ): Promise<ServiceResponse<User | null>> => {
-    console.log('DEBUG TG', tgData);
-
     try {
       const question = await questionRepository.findByIdAsync(id);
       const user = await userRepository.findByTgIdAsync(tgData?.user?.id!);
@@ -137,6 +135,7 @@ export const questionService = {
           multiplier: newMultiplier,
           energy: newEnergy,
         };
+        console.log('DEBUG ENERGY', newUser);
         await userRepository.updateOneAsync(newUser.id as number, newUser as User, tgData);
       }
 
