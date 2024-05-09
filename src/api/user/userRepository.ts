@@ -1,4 +1,5 @@
 import { User } from '@/api/user/userModel';
+import {InitDataParsed} from "@tma.js/sdk";
 
 const pool = require('@/common/db');
 
@@ -100,7 +101,7 @@ export const userRepository = {
     }
   },
 
-  addOneAsync: async (data: User): Promise<User | null> => {
+  addOneAsync: async (data: User, tgData: InitDataParsed): Promise<User | null> => {
     const query = `
         with newUserId as(
             insert into users(tg_id, tg_id_hash, wallet_id) values($1, $2, $3) returning id
@@ -118,13 +119,13 @@ export const userRepository = {
             limit 1;`;
 
     await pool.query(query, [
-      'tg_id', //todo tg
-      'tg_id_hash', //todo tg
+      tgData.user?.id as string,
+      'tg_id_hash', //todo tgHash
       data.wallet,
       data.score,
       0,
       data.energy,
-      data.wallet != null,
+      data.wallet != null, //todo wallet
       false,
       data.nextFreeQuestionTime,
       data.availableQuestions,
@@ -155,7 +156,7 @@ export const userRepository = {
       : null;
   },
 
-  updateOneAsync: async (id: number, user: User): Promise<User | null> => {
+  updateOneAsync: async (id: number, user: User, tgData: InitDataParsed): Promise<User | null> => {
     try {
       const queryUser = `
             update users 
@@ -166,8 +167,8 @@ export const userRepository = {
             where id = $4`;
 
       await pool.query(queryUser, [
-        'tg_id', //todo tg
-        'tg_id_hash', //todo tg
+        tgData.user?.id as string, 
+        'tg_id_hash', //todo tgHash
         user.wallet,
         user.id,
       ]);
@@ -190,7 +191,7 @@ export const userRepository = {
       await pool.query(queryPlayer, [
         user.score,
         user.energy,
-        user.wallet != null,
+        user.wallet != null, //todo wallet
         user.id == 0,
         user.nextFreeQuestionTime,
         user.availableQuestions,

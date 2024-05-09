@@ -4,6 +4,7 @@ import { User, UserCreate } from '@/api/user/userModel';
 import {FREE_QUESTION_TIMEOUT_SECONDS, MAX_USER_ENERGY, userRepository} from '@/api/user/userRepository';
 import { ResponseStatus, ServiceResponse } from '@/common/models/serviceResponse';
 import { logger } from '@/server';
+import {InitDataParsed} from "@tma.js/sdk";
 
 export const userService = {
   // Retrieves all users from the database
@@ -38,6 +39,9 @@ export const userService = {
 
   findByTgId: async (tgId: string): Promise<ServiceResponse<User | null>> => {
     try {
+      if (tgId === undefined || tgId === 'undefined') {
+        return new ServiceResponse(ResponseStatus.Failed, 'Tg id is undefined', null, StatusCodes.NOT_FOUND);
+      }
       const user = await userRepository.findByTgIdAsync(tgId);
       if (!user) {
         return new ServiceResponse(ResponseStatus.Failed, 'User not found', null, StatusCodes.NOT_FOUND);
@@ -50,7 +54,7 @@ export const userService = {
     }
   },
   
-  addOne: async (data: UserCreate): Promise<ServiceResponse<User | null>> => {
+  addOne: async (data: UserCreate, tgData: InitDataParsed): Promise<ServiceResponse<User | null>> => {
     try {
       const user = await userRepository.addOneAsync({
         id: -1, //ignore
@@ -66,7 +70,7 @@ export const userService = {
         fillEnergyTime: new Date(),
         nextFreeQuestionTime: new Date(new Date().setSeconds(new Date().getSeconds() + FREE_QUESTION_TIMEOUT_SECONDS)),
         availableQuestions: 1,
-      });
+      }, tgData);
       if (!user) {
         return new ServiceResponse(ResponseStatus.Failed, 'Creation failed', null, StatusCodes.NOT_FOUND);
       }
@@ -77,7 +81,7 @@ export const userService = {
       return new ServiceResponse(ResponseStatus.Failed, errorMessage, null, StatusCodes.INTERNAL_SERVER_ERROR);
     }
   },
-  updateOne: async (id: number, data: User): Promise<ServiceResponse<User | null>> => {
+  updateOne: async (id: number, data: User, tgData: InitDataParsed): Promise<ServiceResponse<User | null>> => {
     try {
       const user = await userRepository.findByIdAsync(id);
 
@@ -90,7 +94,7 @@ export const userService = {
         data.nextFreeQuestionTime = new Date(new Date().setSeconds(new Date().getSeconds() + FREE_QUESTION_TIMEOUT_SECONDS));
       }
       
-      const updatedUser = await userRepository.updateOneAsync(id, data);
+      const updatedUser = await userRepository.updateOneAsync(id, data, tgData);
 
       if (updatedUser) {
         return new ServiceResponse<User>(ResponseStatus.Success, 'User updated', updatedUser, StatusCodes.OK);

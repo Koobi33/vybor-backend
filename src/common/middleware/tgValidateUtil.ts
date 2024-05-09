@@ -28,7 +28,7 @@ const verifyInitData: RequestHandler = (_req, res, next) => {
     return next();
   }
   return next();
-  //res.sendStatus(401);
+  //res.sendStatus(401); todo
 };
 
 export default () => [verifyInitData];
