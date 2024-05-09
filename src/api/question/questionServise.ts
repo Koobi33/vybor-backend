@@ -135,7 +135,7 @@ export const questionService = {
           multiplier: newMultiplier,
           energy: newEnergy,
         };
-        await userRepository.updateOneAsync(newUser.id as number, newUser as User, tgData);
+        await userRepository.updateOneAsync(newUser.playerId as number, newUser as User, tgData);
       }
 
       const updatedQuestion = await questionRepository.updateOneAsync({
