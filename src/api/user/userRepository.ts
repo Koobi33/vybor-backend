@@ -71,7 +71,6 @@ export const userRepository = {
     }
   },
   findByTgIdAsync: async (tgId: number): Promise<User | null> => {
-    console.log('DEBUG TG', tgId);
     try {
       const query = `select * from users u
                    left join players p on u.id = p.user_id

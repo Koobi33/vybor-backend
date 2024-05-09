@@ -89,9 +89,11 @@ export const questionService = {
     option: 'option1' | 'option2',
     tgData: InitDataParsed
   ): Promise<ServiceResponse<User | null>> => {
+    console.log('DEBUG TG', tgData);
+
     try {
       const question = await questionRepository.findByIdAsync(id);
-      const user = await userRepository.findByTgIdAsync(tgData.user?.id!);
+      const user = await userRepository.findByTgIdAsync(tgData?.user?.id!);
       let newUser: User;
 
       if (!question || !user) {
