@@ -167,7 +167,7 @@ export const userRepository = {
             where id = $4`;
 
       await pool.query(queryUser, [
-        tgData.user?.id as string,
+        String(tgData?.user?.id!),
         'tg_id_hash', //todo tgHash
         user.wallet,
         user.id,
