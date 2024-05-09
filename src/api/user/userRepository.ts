@@ -166,7 +166,7 @@ export const userRepository = {
                 wallet_id = $3
             where id = $4`;
 
-      await pool.query(queryUser, [
+      const debug_user = await pool.query(queryUser, [
         String(tgData?.user?.id!),
         'tg_id_hash', //todo tgHash
         user.wallet,
@@ -188,7 +188,7 @@ export const userRepository = {
                 name = $10
             where id = $11`;
 
-      await pool.query(queryPlayer, [
+      const debug_player = await pool.query(queryPlayer, [
         user.score,
         user.energy,
         user.wallet != null, //todo wallet
@@ -208,6 +208,7 @@ export const userRepository = {
 
       const result = await pool.query(query, [id]);
 
+      console.log("DEBUG SCORE" {debug_user, debug_player })
       return result.rows.length
         ? {
             id: result.rows[0].user_id,

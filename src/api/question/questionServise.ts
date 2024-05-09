@@ -135,7 +135,6 @@ export const questionService = {
           multiplier: newMultiplier,
           energy: newEnergy,
         };
-        console.log('DEBUG ENERGY', newUser);
         await userRepository.updateOneAsync(newUser.id as number, newUser as User, tgData);
       }
 
