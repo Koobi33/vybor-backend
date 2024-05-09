@@ -1,5 +1,5 @@
 import { User } from '@/api/user/userModel';
-import {InitDataParsed} from "@tma.js/sdk";
+import { InitDataParsed } from '@tma.js/sdk';
 
 const pool = require('@/common/db');
 
@@ -71,6 +71,7 @@ export const userRepository = {
     }
   },
   findByTgIdAsync: async (tgId: string): Promise<User | null> => {
+    console.log('DEBUG TG', tgId);
     try {
       const query = `select * from users u
                    left join players p on u.id = p.user_id
@@ -167,7 +168,7 @@ export const userRepository = {
             where id = $4`;
 
       await pool.query(queryUser, [
-        tgData.user?.id as string, 
+        tgData.user?.id as string,
         'tg_id_hash', //todo tgHash
         user.wallet,
         user.id,
