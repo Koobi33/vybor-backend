@@ -9,7 +9,7 @@ import { userRouter } from '@/api/user/userRouter';
 import { questionRouter } from '@/api/question/questionRouter';
 import { openAPIRouter } from '@/api-docs/openAPIRouter';
 import errorHandler from '@/common/middleware/errorHandler';
-import rateLimiter from '@/common/middleware/rateLimiter';
+// import rateLimiter from '@/common/middleware/rateLimiter';
 import requestLogger from '@/common/middleware/requestLogger';
 import verifyTelegramData from '@/common/middleware/tgValidateUtil';
 import { env } from '@/common/utils/envConfig';
@@ -22,7 +22,7 @@ app.set('trust proxy', true);
 
 // Middlewares
 app.use(cors({ origin: env.CORS_ORIGIN, credentials: true }));
-app.use(rateLimiter);
+// app.use(rateLimiter);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
