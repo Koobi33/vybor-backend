@@ -54,28 +54,24 @@ export const userService = {
     }
   },
 
-  addOne: async (data: UserCreate, tgData: InitDataParsed): Promise<ServiceResponse<User | null>> => {
+  addOne: async (data: UserCreate): Promise<ServiceResponse<User | null>> => {
     try {
-      const user = await userRepository.addOneAsync(
-        {
-          id: -1, //ignore
-          playerId: -1, //ignore
-          isModerator: false,
-          name: data.name,
-          score: 0,
-          multiplier: 1,
-          wallet: null,
-          locale: data.locale,
-          energy: MAX_USER_ENERGY,
-          maxEnergy: MAX_USER_ENERGY,
-          fillEnergyTime: new Date(),
-          nextFreeQuestionTime: new Date(
-            new Date().setSeconds(new Date().getSeconds() + FREE_QUESTION_TIMEOUT_SECONDS)
-          ),
-          availableQuestions: 1,
-        },
-        tgData
-      );
+      const user = await userRepository.addOneAsync({
+        id: -1, //ignore
+        playerId: -1, //ignore
+        isModerator: false,
+        name: data.name,
+        score: 0,
+        multiplier: 1,
+        wallet: null,
+        locale: data.locale,
+        energy: MAX_USER_ENERGY,
+        maxEnergy: MAX_USER_ENERGY,
+        fillEnergyTime: new Date(),
+        tg_id: data.tg_id,
+        nextFreeQuestionTime: new Date(new Date().setSeconds(new Date().getSeconds() + FREE_QUESTION_TIMEOUT_SECONDS)),
+        availableQuestions: 1,
+      });
       if (!user) {
         return new ServiceResponse(ResponseStatus.Failed, 'Creation failed', null, StatusCodes.NOT_FOUND);
       }

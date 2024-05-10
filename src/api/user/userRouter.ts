@@ -59,19 +59,21 @@ export const userRouter: Router = (() => {
     handleServiceResponse(serviceResponse, res);
   });
 
-  userRegistry.registerPath({
-    method: 'get',
-    path: '/users/tg',
-    tags: ['User'],
-    responses: createApiResponse(UserSchema, 'Success'),
-  });
+  // userRegistry.registerPath({
+  //   method: 'get',
+  //   path: '/users/tg',
+  //   tags: ['User'],
+  //   responses: createApiResponse(UserSchema, 'Success'),
+  // });
 
-  router.get('/tg', async (req: Request, res: Response) => {
-    const tgData = parseTelegramData(_req.headers['tg-init-data'] as string);
-    const id = tgData?.user?.id as string;
-    const serviceResponse = await userService.findByTgId(id);
-    handleServiceResponse(serviceResponse, res);
-  });
+  // router.get('/tg', async (_req: Request, res: Response) => {
+  //   const tgData = parseTelegramData(_req.headers['tg-init-data'] as string);
+  //   if (tgData) {
+  //     const id = tgData?.user?.id!;
+  //     const serviceResponse = await userService.findByTgId(id);
+  //     handleServiceResponse(serviceResponse, res);
+  //   }
+  // });
 
   // CREATE USER
   userRegistry.registerPath({
@@ -91,8 +93,7 @@ export const userRouter: Router = (() => {
   });
 
   router.post('/', async (_req: Request, res: Response) => {
-    const tgData = parseTelegramData(_req.headers['tg-init-data'] as string);
-    const createdUser = await userService.addOne(_req.body, tgData);
+    const createdUser = await userService.addOne(_req.body);
     handleServiceResponse(createdUser, res);
   });
 

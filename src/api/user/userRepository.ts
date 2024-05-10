@@ -53,6 +53,7 @@ export const userRepository = {
         ? {
             id: result.rows[0].user_id,
             playerId: result.rows[0].id,
+            tg_id: result.rows[0].tg_id,
             isModerator: result.rows[0].is_moderator,
             name: result.rows[0].name,
             score: result.rows[0].score,
@@ -83,6 +84,7 @@ export const userRepository = {
         ? {
             id: result.rows[0].user_id,
             playerId: result.rows[0].id,
+            tg_id: result.rows[0].tg_id,
             isModerator: result.rows[0].is_moderator,
             name: result.rows[0].name,
             score: result.rows[0].score,
@@ -102,7 +104,7 @@ export const userRepository = {
     }
   },
 
-  addOneAsync: async (data: User, tgData: InitDataParsed): Promise<User | null> => {
+  addOneAsync: async (data: User): Promise<User | null> => {
     const query = `
         with newUserId as(
             insert into users(tg_id, tg_id_hash, wallet_id) values($1, $2, $3) returning id
@@ -120,7 +122,7 @@ export const userRepository = {
             limit 1;`;
 
     await pool.query(query, [
-      String(tgData.user?.id),
+      data.tg_id,
       'tg_id_hash', //todo tgHash
       data.wallet,
       data.score,
@@ -142,6 +144,7 @@ export const userRepository = {
       ? {
           id: result.rows[0].user_id,
           playerId: result.rows[0].id,
+          tg_id: result.rows[0].tg_id,
           isModerator: result.rows[0].is_moderator,
           name: result.rows[0].name,
           score: result.rows[0].score,
@@ -213,6 +216,7 @@ export const userRepository = {
         ? {
             id: result.rows[0].user_id,
             playerId: result.rows[0].id,
+            tg_id: result.rows[0].tg_id,
             isModerator: result.rows[0].is_moderator,
             name: result.rows[0].name,
             score: result.rows[0].score,
