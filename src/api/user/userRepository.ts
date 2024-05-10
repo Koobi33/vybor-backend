@@ -1,4 +1,4 @@
-import { User } from '@/api/user/userModel';
+import {User, UserInvite} from '@/api/user/userModel';
 import { InitDataParsed } from '@tma.js/sdk';
 
 const pool = require('@/common/db');
@@ -9,10 +9,9 @@ export const FREE_QUESTION_TIMEOUT_SECONDS: number = 60 * 60 * 24 * 3;
 export const userRepository = {
   findAllAsync: async (): Promise<User[]> => {
     try {
-      //RETURNS LEADERBOARD - users with connected wallets
       const query = `select * from users u
           left join players p on u.id = p.user_id
-          where p.user_id is not null and p.wallet not null`;
+          where p.user_id is not null and u.wallet_id is not null`;
 
       const queryResult = await pool.query(query);
 
@@ -104,7 +103,7 @@ export const userRepository = {
     }
   },
 
-  addOneAsync: async (data: User): Promise<User | null> => {
+  addOneAsync: async (data: User, inviteData: UserInvite): Promise<User | null> => {
     const query = `
         with newUserId as(
             insert into users(tg_id, tg_id_hash, wallet_id) values($1, $2, $3) returning id
@@ -139,6 +138,16 @@ export const userRepository = {
     ]);
 
     const result = await pool.query(selectQuery);
+    
+    if (inviteData != null && result.rows.length)
+    {
+        const inviteQuery = `insert into invites values($1, $2, $3, $4)`;
+        await pool.query(inviteQuery,
+            inviteData.inviteSenderId,
+            result.rows[0].user_id,
+            inviteData.invitePlacement,
+            inviteData.inviteEntityId);
+    }
 
     return result.rows.length
       ? {

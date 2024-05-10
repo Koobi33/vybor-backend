@@ -23,12 +23,20 @@ export const UserSchema = z.object({
   availableQuestions: z.number(),
 });
 
+export type UserInvite = z.infer<typeof UserInviteSchema | null>;
+export const UserInviteSchema = z.object({
+  inviteSenderId: z.number(),
+  invitePlacement: z.string(),
+  inviteEntityId: z.string()
+});
+
 export type UserCreate = z.infer<typeof UserCreateSchema>;
 export const UserCreateSchema = z.object({
   name: z.string(),
   locale: z.string(),
   tg_id: z.number(),
   invitedBy: z.number(),
+  userInvite: UserInviteSchema,
 });
 
 // Input Validation for 'GET users/:id' endpoint

@@ -71,7 +71,7 @@ export const userService = {
         tg_id: data.tg_id,
         nextFreeQuestionTime: new Date(new Date().setSeconds(new Date().getSeconds() + FREE_QUESTION_TIMEOUT_SECONDS)),
         availableQuestions: 1,
-      });
+      }, data.userInvite);
       if (!user) {
         return new ServiceResponse(ResponseStatus.Failed, 'Creation failed', null, StatusCodes.NOT_FOUND);
       }
