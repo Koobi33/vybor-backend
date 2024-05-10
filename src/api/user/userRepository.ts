@@ -8,11 +8,11 @@ export const FREE_QUESTION_TIMEOUT_SECONDS: number = 60 * 60 * 24 * 3;
 
 export const userRepository = {
   findAllAsync: async (): Promise<User[]> => {
-    //return users.sort((a, b) => b.score - a.score);
     try {
+      //RETURNS LEADERBOARD - users with connected wallets
       const query = `select * from users u
           left join players p on u.id = p.user_id
-          where p.user_id is not null`;
+          where p.user_id is not null and p.wallet not null`;
 
       const queryResult = await pool.query(query);
 
