@@ -8,12 +8,13 @@ import { userRepository } from '../user/userRepository';
 import { ResponseStatus, ServiceResponse } from '@/common/models/serviceResponse';
 import { logger } from '@/server';
 import { User } from '../user/userModel';
+import shuffle from 'lodash/shuffle';
 
 export const questionService = {
   // Retrieves all questions from the database
   findAll: async (userId: number, questionId?: number): Promise<ServiceResponse<Question[] | null>> => {
     try {
-      let questions = await questionRepository.findAllAsync(userId);
+      let questions = shuffle(await questionRepository.findAllAsync(userId));
       if (questionId) {
         const questionIndex = questions.findIndex((question) => question.id === questionId);
         if (questionIndex) {
