@@ -145,7 +145,7 @@ export const userRepository = {
           Number(inviteData.inviteSenderId),
           result.rows[0].user_id,
           inviteData.invitePlacement,
-          inviteData.inviteEntityId,
+          Number(inviteData.inviteEntityId),
         ]);
       } catch (err) {
         console.log('DEBUG 2', err);
