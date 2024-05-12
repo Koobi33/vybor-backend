@@ -21,7 +21,9 @@ const app: Express = express();
 app.set('trust proxy', true);
 
 // Middlewares
-app.use(cors({ origin: env.CORS_ORIGIN, credentials: true, exposedHeaders: ['Content-Length', 'tg-init-data'] }));
+app.use(
+  cors({ origin: env.CORS_ORIGIN, credentials: true, exposedHeaders: ['Content-Length', 'Tg-Init-Data', 'Userid'] })
+);
 // app.use(rateLimiter);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
