@@ -55,7 +55,6 @@ export const userService = {
   },
 
   addOne: async (data: UserCreate): Promise<ServiceResponse<User | null>> => {
-    console.log('DEBUG', data.userInvite);
     try {
       const user = await userRepository.addOneAsync(
         {

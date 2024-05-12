@@ -137,17 +137,20 @@ export const userRepository = {
     ]);
 
     const result = await pool.query(selectQuery);
-    console.log('DEBUG 2', inviteData, result.rows.length);
 
     if (inviteData != null && result.rows.length) {
-      const inviteQuery = `insert into invites values($1, $2, $3, $4)`;
-      await pool.query(
-        inviteQuery,
-        inviteData.inviteSenderId,
-        result.rows[0].user_id,
-        inviteData.invitePlacement,
-        inviteData.inviteEntityId
-      );
+      try {
+        const inviteQuery = `insert into invites values($1, $2, $3, $4)`;
+        await pool.query(
+          inviteQuery,
+          inviteData.inviteSenderId,
+          result.rows[0].user_id,
+          inviteData.invitePlacement,
+          inviteData.inviteEntityId
+        );
+      } catch (err) {
+        console.log('DEBUG 2', err);
+      }
     }
 
     return result.rows.length
