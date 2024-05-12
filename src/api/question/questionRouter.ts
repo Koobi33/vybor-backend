@@ -70,7 +70,7 @@ export const questionRouter: Router = (() => {
   });
 
   router.post('/', async (_req: Request, res: Response) => {
-    const serviceResponse = await questionService.addOne(_req.body);
+    const serviceResponse = await questionService.addOne(_req.body.data);
     handleServiceResponse(serviceResponse, res);
   });
 
