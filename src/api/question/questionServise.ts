@@ -58,6 +58,7 @@ export const questionService = {
   },
 
   addOne: async (data: QuestionCreate): Promise<ServiceResponse<Question | null>> => {
+    console.log('DEBUG', data);
     try {
       const question = await questionRepository.addOneAsync({
         id: -1,
