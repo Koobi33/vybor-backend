@@ -1,4 +1,4 @@
-import {User, UserInvite} from '@/api/user/userModel';
+import { User, UserInvite } from '@/api/user/userModel';
 import { InitDataParsed } from '@tma.js/sdk';
 
 const pool = require('@/common/db');
@@ -40,7 +40,6 @@ export const userRepository = {
   },
 
   findByIdAsync: async (id: number): Promise<User | null> => {
-    //TODO: fix
     try {
       const query = `select * from users u
                      left join players p on u.id = p.user_id
@@ -138,15 +137,17 @@ export const userRepository = {
     ]);
 
     const result = await pool.query(selectQuery);
-    
-    if (inviteData != null && result.rows.length)
-    {
-        const inviteQuery = `insert into invites values($1, $2, $3, $4)`;
-        await pool.query(inviteQuery,
-            inviteData.inviteSenderId,
-            result.rows[0].user_id,
-            inviteData.invitePlacement,
-            inviteData.inviteEntityId);
+    console.log('DEBUG 2', inviteData, result.rows.length);
+
+    if (inviteData != null && result.rows.length) {
+      const inviteQuery = `insert into invites values($1, $2, $3, $4)`;
+      await pool.query(
+        inviteQuery,
+        inviteData.inviteSenderId,
+        result.rows[0].user_id,
+        inviteData.invitePlacement,
+        inviteData.inviteEntityId
+      );
     }
 
     return result.rows.length

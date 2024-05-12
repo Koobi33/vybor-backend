@@ -35,7 +35,6 @@ export const UserCreateSchema = z.object({
   name: z.string(),
   locale: z.string(),
   tg_id: z.number(),
-  invitedBy: z.number(),
   userInvite: UserInviteSchema,
 });
 
