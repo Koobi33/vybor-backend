@@ -143,7 +143,7 @@ export const userRepository = {
         const inviteQuery = `insert into invites values($1, $2, $3, $4)`;
         await pool.query(inviteQuery, [
           Number(inviteData.inviteSenderId),
-          result.rows[0].user_id,
+          result.rows[0].playerId,
           inviteData.invitePlacement,
           Number(inviteData.inviteEntityId),
         ]);
