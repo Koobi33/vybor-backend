@@ -68,7 +68,7 @@ describe('userService', () => {
       // Arrange
       const testId = 1;
       const mockUser = mockUsers.find((user) => user.id === testId);
-      (userRepository.findByIdAsync as Mock).mockReturnValue(mockUser);
+      (userRepository.findByPlayerIdAsync as Mock).mockReturnValue(mockUser);
 
       // Act
       const result = await userService.findById(testId);
@@ -83,7 +83,7 @@ describe('userService', () => {
     it('handles errors for findByIdAsync', async () => {
       // Arrange
       const testId = 1;
-      (userRepository.findByIdAsync as Mock).mockRejectedValue(new Error('Database error'));
+      (userRepository.findByPlayerIdAsync as Mock).mockRejectedValue(new Error('Database error'));
 
       // Act
       const result = await userService.findById(testId);
@@ -98,7 +98,7 @@ describe('userService', () => {
     it('returns a not found error for non-existent ID', async () => {
       // Arrange
       const testId = 1;
-      (userRepository.findByIdAsync as Mock).mockReturnValue(null);
+      (userRepository.findByPlayerIdAsync as Mock).mockReturnValue(null);
 
       // Act
       const result = await userService.findById(testId);

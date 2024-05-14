@@ -21,7 +21,7 @@ export const questionService = {
           questions.sort((a, b) => (a.id == questionId ? -1 : b.id == questionId ? 1 : 0));
         }
       }
-      const user = await userRepository.findByIdAsync(userId);
+      const user = await userRepository.findByPlayerIdAsync(userId);
       if (!user || !questions) {
         return new ServiceResponse(ResponseStatus.Failed, 'Something went wrong', null, StatusCodes.NOT_FOUND);
       }
@@ -89,7 +89,7 @@ export const questionService = {
   updateOne: async (
     id: number,
     option: 'option1' | 'option2',
-    tgData: InitDataParsed
+    tgData: InitDataParsed | null
   ): Promise<ServiceResponse<User | null>> => {
     try {
       const question = await questionRepository.findByIdAsync(id);
