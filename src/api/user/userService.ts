@@ -25,7 +25,7 @@ export const userService = {
   // Retrieves a single user by their ID
   findById: async (id: number): Promise<ServiceResponse<User | null>> => {
     try {
-      const user = await userRepository.findByIdAsync(id);
+      const user = await userRepository.findByPlayerIdAsync(id);
       if (!user) {
         return new ServiceResponse(ResponseStatus.Failed, 'User not found', null, StatusCodes.NOT_FOUND);
       }
@@ -89,7 +89,7 @@ export const userService = {
   },
   updateOne: async (id: number, data: User, tgData: InitDataParsed): Promise<ServiceResponse<User | null>> => {
     try {
-      const user = await userRepository.findByIdAsync(id);
+      const user = await userRepository.findByPlayerIdAsync(id);
 
       if (!user) {
         return new ServiceResponse(ResponseStatus.Failed, 'user not found', null, StatusCodes.NOT_FOUND);

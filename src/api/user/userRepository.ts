@@ -39,7 +39,7 @@ export const userRepository = {
     }
   },
 
-  findByIdAsync: async (id: number): Promise<User | null> => {
+  findByPlayerIdAsync: async (id: number): Promise<User | null> => {
     try {
       const query = `select * from users u
                      left join players p on u.id = p.user_id
@@ -70,6 +70,7 @@ export const userRepository = {
       throw error;
     }
   },
+    
   findByTgIdAsync: async (tgId: number): Promise<User | null> => {
     try {
       const query = `select * from users u
